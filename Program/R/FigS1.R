@@ -1,4 +1,4 @@
-topDir <- "~/IMIC/table/predicted_growth/" 
+topDir <- "~/IMIC/table/predicted_growth/"
 
 ######## consensus model ########
 data <- read.table(paste0(topDir, 'consensus_results_table.csv'),
@@ -18,7 +18,7 @@ a <- ggscatter(data, x =  'MAG_ab', y = 'IMIC',
   font("title", size = 15, face = 'bold')+
   font("y.text", size = 15)+
   font('ylab', size = 15)+
-  stat_cor(method = "spearman", label.x = 20, label.y = 40, size= 5.5)+
+  stat_cor(method = "spearman", label.x = 20, label.y = 40, size= 5.5, cor.coef.name = 'r')+
   theme(axis.text.x = element_blank())
 
 a
@@ -38,7 +38,7 @@ b <- ggscatter(data, x =  'MAG_ab', y = 'IMIC',
   labs(title = 'b. CarveMe')+
   font("title", size = 15, face = 'bold')+
   font("y.text", size = 15)+
-  stat_cor(method = "spearman", label.x = 40, label.y = 35, size= 5.5)+
+  stat_cor(method = "spearman", label.x = 40, label.y = 35, size= 5.5, cor.coef.name = 'r')+
   theme(axis.text.x = element_blank())
 
 b
@@ -60,7 +60,7 @@ c <- ggscatter(data, x =  'MAG_ab', y = 'IMIC',
   font("x.text", size = 15)+
   font("xlab", size = 15)+
   font("ylab", size = 15)+
-  stat_cor(method = "spearman", label.x = 30, label.y = 30, size= 5.5)
+  stat_cor(method = "spearman", label.x = 30, label.y = 30, size= 5.5, cor.coef.name = 'r')
 
 c
 
@@ -80,7 +80,7 @@ d <- ggscatter(data, x =  'MAG_ab', y = 'IMIC',
   font("title", size = 15, face = 'bold')+
   font("x.text", size = 15)+
   font("y.text", size = 15)+
-  stat_cor(method = "spearman", label.x = 40, label.y = 30, size= 5.5)
+  stat_cor(method = "spearman", label.x = 40, label.y = 30, size= 5.5, cor.coef.name = 'r')
 
 d
 

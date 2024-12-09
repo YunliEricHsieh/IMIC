@@ -1,5 +1,5 @@
 topDir <- "~/IMIC/table/predicted_growth/"
-micom <- read.table(paste0(topDir, 'MICOM_results_table.csv'),
+micom <- read.table(paste0(topDir, 'consensus_MICOM_results_table.csv'),
                     header = T, sep = ',')
 
 library(ggplot2)
@@ -17,7 +17,7 @@ ab1 <- ggscatter(micom, x =  'MAG_ab', y = 'MICOM_ab_1',
   font("title", size = 15, face = 'bold')+
   font("xlab", size = 15)+
   font("x.text", size = 13)+
-  stat_cor(method = "spearman", label.x = 5, label.y = 180, size= 5.5)+
+  stat_cor(method = "spearman", label.x = 5, label.y = 180, size= 5.5, cor.coef.name = 'r')+
   theme(panel.border = element_rect(color = 'black', size = 1, fill = NA),
         axis.text.y = element_blank())
 
@@ -37,7 +37,7 @@ ab <- ggscatter(micom, x =  'MAG_ab', y = 'MICOM',
   font("title", size = 15, face = 'bold')+
   font("x.text", size = 13)+
   font("y.text", size = 13)+
-  stat_cor(method = "spearman", label.x = 5, label.y = 180, size= 5.5)+
+  stat_cor(method = "spearman", label.x = 5, label.y = 180, size= 5.5, cor.coef.name = 'r')+
   theme(panel.border = element_rect(color = 'black', size = 1, fill = NA))
 
 ab
@@ -49,10 +49,10 @@ library(scales)
 topDir <- "~/IMIC/table/parameter_test/"
 
 ##### coco test #####
-data <- read.table(paste0(topDir, 'coco_test_alpha_0.5.csv'),
+data <- read.table(paste0(topDir, 'consensus_coco_test_alpha_0.5.csv'),
                    header = T, sep = ',')
 ##### coco test with abundance = 1 results #####
-data_ab <- read.table(paste0(topDir, 'coco_test_with_abundance_1.csv'),
+data_ab <- read.table(paste0(topDir, 'consensus_coco_test_with_abundance_1.csv'),
                       header = T, sep = ',')
 
 cor_result <- data.frame()
@@ -213,6 +213,7 @@ e <- ggplot(cor_result, aes(x = fct_inorder(Lambda), y = cor_ab))+
 e
 
 ######## consensus model ########
+topDir <- "~/IMIC/table/predicted_growth/"
 data <- read.table(paste0(topDir, 'consensus_results_table.csv'),
                    header = T, sep = ',')
 
@@ -232,7 +233,7 @@ f <- ggscatter(data, x =  'MAG_ab', y = 'IMIC',
   font('ylab', size = 15)+
   font("x.text", size = 15)+
   font('xlab', size = 15)+
-  stat_cor(method = "spearman", label.x = 20, label.y = 40, size= 5.5)+
+  stat_cor(method = "spearman", label.x = 20, label.y = 40, size= 5.5, cor.coef.name = 'r')+
   theme(panel.border = element_rect(color = 'black', size = 1, fill = NA),)
 
 f
