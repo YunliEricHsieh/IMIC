@@ -1,19 +1,16 @@
-function [min_flux_sum, mets_ID] = MICOM_flux_sum(model, max_growth, micom_obj_value, abTable, alpha, tar_met_IDs)
-% Function for the flux sum analysis.
+function [flux_sum_value, mets_ID]  = MICOM_flux_sum(model, max_growth, abTable, alpha, tar_met_IDs)
+% Function for the second setp of MICOM.
 % Input:
 %       model:                  community metabolic models as struct object
 %       max_growth:             the maximum connumity growth rate
 %                               calculated from the first step of MICOM
-%       micom_obj_value:        calculated from the second step of MICOM
-%                               for quadratic constraint
 %       abTable:                table containing the relative abundance of
 %                               each organism
 %       alpha:                  user-specified trade-off
-%       tar_met_IDs:            the list of imported metabolites
+%       tar_met_IDs:            the list of metabolites
 % Output:
-%       min_flux_sum:           minimum flux sum value of each imported metabolite 
+%       flux_sum_value:         flux sum value of each targeted metabolite 
 %       mets_ID:                the list of tested metabolite
-
 
 if ~isempty(tar_met_IDs)
     % use the provided metabolite IDs
@@ -26,7 +23,7 @@ end
 % find model ID number
 num = extractBetween(abTable.Genome,'KG','_');
 
-% define lower and upper bounds for v and flux sum variable:
+% define lower and upper bounds:
 ub = [model.ub; ones(numel(tar_mets),1)*10^9];
 lb = [model.lb; zeros(numel(tar_mets),1)];
 
@@ -45,8 +42,12 @@ for i = 1:numel(export)
     clear ex t inx n 
 end
 
-% set up minimum growth rate
+% define the objective:
+f = [zeros(size(model.S,2),1); zeros(numel(tar_mets),1)];
+
 bio = find(ismember(model.rxns,'BIOMASS_Reaction_'));
+
+% set up minimum growth rate
 lb(bio) = 0.001;
 
 % equality constraints:
@@ -84,42 +85,19 @@ for i = 1:numel(biomass_rxns)
 end
 
 % using Gurobi solver
+problem.Q = sparse(H);
 problem.A = [Aeq; A_ineq];
 problem.rhs = [beq; b_ineq];
-problem.quadcon.Qc = sparse(H);
-problem.quadcon.rhs = [micom_obj_value]; % quadratic constraint
-problem.quadcon.q = zeros(1, size(Aeq,2));
-problem.quadcon.sense = '=';
-
+problem.obj = f;
 problem.lb = lb;
 problem.ub = ub;
 problem.sense = [repelem('=',size(beq,1),1); repelem('<',size(b_ineq,1),1)];
 problem.vtype = repelem('C',size(Aeq,2),1);
+problem.modelsense = 'min';
+
+com_solution = gurobi(problem);
 
 mets_ID = tar_mets;
-min_flux_sum = [];
-
-% minimum flux sum analysis for each metabolite in [e]
-for i = 1:numel(tar_mets)
-
-    % define the objective:
-    f = zeros(size(Aeq,2),1);
-    num = size(model.S,2) + i;
-
-    % using Gurobi solver
-    % minimum flux
-    f(num) = 1;
-    problem.obj = f;
-    solution_min = gurobi(problem);
-
-    if isfield(solution_min, 'x') && ~contains(solution_min.status, 'NUMERIC')
-        min_flux_sum = [min_flux_sum; solution_min.objval];
-    else 
-        % the model couldn't find feasible solution 
-        min_flux_sum = [min_flux_sum; nan];
-    end  
- 
-    clear f num solution_min
-end
+flux_sum_value = com_solution.x(size(Aeq,2)-numel(tar_mets)+1:end);
 
 end
