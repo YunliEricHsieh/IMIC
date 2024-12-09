@@ -109,11 +109,7 @@ for i = 1:numel(timepoint)
     micom_obj_value = com_solution.objval;
 
     % FVA for transport reactions
-<<<<<<< HEAD
-    [min_flux_sum, mets_ID]  = MICOM_flux_sum(com_model, max_growth, micom_obj_value, abTable, alpha, import_mets);
-=======
     [min_flux_sum, mets_ID]  = MICOM_min_flux_sum(com_model, max_growth, micom_obj_value, abTable, alpha, import_mets);
->>>>>>> 03da4f62cc99fdbd6ffdf79926f3f674a8b2cfd7
 
     flux_sum_min(:, i) = min_flux_sum;
     metabolite_ID{i} = mets_ID;
