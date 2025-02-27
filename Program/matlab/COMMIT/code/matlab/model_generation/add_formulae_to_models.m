@@ -1,7 +1,8 @@
 % add formulae to models
+tablesDir = '~/IMIC/Program/matlab/COMMIT/data/tables';
+formulaeFile = fullfile(tablesDir, 'MNXref', 'MNXref_MET_FORMULAE.csv');
+formulaTab = readtable(formulaeFile, 'ReadVariableNames', true, 'Delimiter', '\t');
 
-formulaTab = readtable('~/IMIC/Program/matalb/COMMIT/data/tables/MNXref/MNXref_MET_FORMULAE.csv',...
-    'ReadVariableNames', true);
 methods = {'carveme','gapseq','kbase'};
 %modelTopDir = '~/IMIC/study_case/models';
 modelTopDir = '~/IMIC/models';
