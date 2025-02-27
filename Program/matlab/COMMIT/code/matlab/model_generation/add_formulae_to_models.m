@@ -1,3 +1,11 @@
+options
+
+% set up parallel pool
+c = parcluster;
+c.NumWorkers = ncpu;
+delete(gcp('nocreate'))
+P = parpool(c);
+
 % add formulae to models
 tablesDir = '~/IMIC/Program/matlab/COMMIT/data/tables';
 formulaeFile = fullfile(tablesDir, 'MNXref', 'MNXref_MET_FORMULAE.csv');
@@ -12,7 +20,7 @@ for j = 1:numel(methods)
     workspace = fullfile(modelTopDir, methods{j}, strcat(methods{j}, '_models_no_medium_no_biomass.mat'));
     load(workspace)
         
-    for k=1:numel(models)
+    parfor k=1:numel(models)
         models{k} = addMetFormulae(models{k}, formulaTab);
     end
 
