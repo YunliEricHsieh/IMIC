@@ -8,14 +8,16 @@ disp('Loading required data...')
 options
 
 % medium
-%load(mediumFile, 'medium')
-load(LB_mediumFile, 'LB_medium')
+load(mediumFile, 'medium')
+%load(LB_mediumFile, 'LB_medium')
 
 % Universal database
 load(dbFile)
 
-methods = {'consensus'};
-modelDir =  '~/IMIC/study_case/models';
+methods = {'carveme','gapseq','kbase','consensus'};
+%methods = {'consensus'};
+modelDir =  '~/IMIC/models';
+%modelDir =  '~/IMIC/study_case/models';
 
 % start parallel pool
 delete(gcp('nocreate'))
@@ -65,7 +67,8 @@ for j = 1:numel(methods)
     elseif exist('mediaDir', 'var') && ~isempty(mediaDir) && ~exist('mediaDir', 'dir')
         error('Given path to auxotrophic media directory does not exist: %s', mediaDir)
     else
-        auxo_media = repelem({LB_medium}, numel(merged_models), 1);
+        auxo_media = repelem({medium}, numel(merged_models), 1);
+        %auxo_media = repelem({LB_medium}, numel(merged_models), 1);
     end
     
     % write single .mat files for every model in a subdirectory
@@ -80,11 +83,16 @@ for j = 1:numel(methods)
         
         % run iterative gap filling
         [GF, EX, gf_order, solutions, exc, gf, bio] = ...
-            iterativeGapFilling(fileList, LB_medium, auxo_media,...
+            iterativeGapFilling(fileList, medium, auxo_media,...
             dbModel_MNXref_balanced, weights, epsilon, include_sink,...
             order, iterations, seq_sim_workspace);
+        % [GF, EX, gf_order, solutions, exc, gf, bio] = ...
+        %     iterativeGapFilling(fileList, LB_medium, auxo_media,...
+        %     dbModel_MNXref_balanced, weights, epsilon, include_sink,...
+        %     order, iterations, seq_sim_workspace);
 
-        outDir = fullfile('~/IMIC/study_case/models/iterative');
+        outDir = fullfile('~/IMIC/models/iterative');
+        % outDir = fullfile('~/IMIC/study_case/models/iterative');
 
         save(fullfile(outDir, methods{j}),...
             'GF', 'EX', 'gf_order', 'solutions', 'exc', 'gf', 'bio')

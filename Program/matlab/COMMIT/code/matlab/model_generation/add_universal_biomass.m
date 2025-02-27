@@ -9,7 +9,8 @@ biomass_rxn = table2cell(biomass_rxn);
 biomass_name = 'universal_Biomass_reaction';
 
 methods = {'consensus'};
-modelTopDir =  '~/IMIC/study_case/models';
+modelTopDir =  '~/IMIC/models';
+%modelTopDir =  '~/IMIC/study_case/models';
 
 %% Merged models
 disp('Consensus')
