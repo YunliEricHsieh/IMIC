@@ -5,7 +5,7 @@ function translationDB = loadTranslationDB
 %   struct translationDB:           structure with fields 'metTab' and
 %                                   'rxnTab'
 
-tablesDir = fullfile('data', 'tables');
+tablesDir = '~/IMIC/Program/matlab/COMMIT/data/tables';
 metTransFile = fullfile(tablesDir, 'MNXref', 'MNXref-met-translation-table.csv');
 rxnTransFile = fullfile(tablesDir, 'MNXref', 'MNXref-rxn-translation-table.csv');
 metTransTab = readtable(metTransFile, 'ReadVariableNames', true,...
