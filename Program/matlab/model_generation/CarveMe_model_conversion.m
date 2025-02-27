@@ -2,7 +2,7 @@
 %% CarveMe
 % Tables
 tablesDir = '~/IMIC/Program/matlab/COMMIT/data/tables';
-topDir = '~/IMIC/study_case';
+topDir = '~/IMIC';
 
 ecTransFile = fullfile(tablesDir, 'corrected-EC-numbers.csv');
 coFactorFile = fullfile(tablesDir, 'cofactors_from_KEGG.csv');
@@ -17,8 +17,8 @@ translationDB = loadTranslationDB;
 
 fprintf('################# Converting CarveMe draft models #################\n')
   
-CarveMeModelDir = fullfile(topDir, 'models/carveme');
-DraftWorkspace = fullfile(topDir, 'models/carveme/carveme_models_draft.mat');
+CarveMeModelDir = fullfile(topDir, 'models/carveme/draft');
+DraftWorkspace = fullfile(topDir, 'models/carveme/draft/carveme_models_draft.mat');
 ModelWorkspace = fullfile(topDir, 'models/carveme/carveme_models.mat');
 CarveMeModels = dir(fullfile(CarveMeModelDir, '*.xml'));
 CarveMeModels = {CarveMeModels.name};
