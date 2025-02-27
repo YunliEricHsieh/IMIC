@@ -23,7 +23,7 @@ elseif nargin == 2
 end
 
 %fid1 = fopen(fullfile('data','models','consensus','duplicate_reactions.txt'), 'w');
-fid1 = fopen(fullfile('~/project_2/models/carveme/duplicate_reactions.txt'), 'w');
+fid1 = fopen(fullfile('~IMIC/models/duplicate_reactions.txt'), 'w');
 fprintf(fid1, 'ID\tEquation\n');
 
 %% Initialize class
