@@ -1,7 +1,7 @@
 % remove exchange reactions and biomass reactions
 options; clear
 
-modelTopDir = '~/IMIC/study_case/models';
+modelTopDir = '~/IMIC/models';
 methods = {'carveme','gapseq','kbase'};
 
 for i = 1:numel(methods)
