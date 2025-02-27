@@ -3,7 +3,8 @@
 formulaTab = readtable('~/IMIC/Program/matalb/COMMIT/data/tables/MNXref/MNXref_MET_FORMULAE.csv',...
     'ReadVariableNames', true);
 methods = {'carveme','gapseq','kbase'};
-modelTopDir = '~/IMIC/study_case/models';
+%modelTopDir = '~/IMIC/study_case/models';
+modelTopDir = '~/IMIC/models';
 
 for j = 1:numel(methods)
     disp(methods{j})

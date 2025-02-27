@@ -2,6 +2,7 @@
 options; clear
 
 modelTopDir = '~/IMIC/models';
+%modelTopDir = '~/IMIC/study_case/models';
 methods = {'carveme','gapseq','kbase'};
 
 for i = 1:numel(methods)
