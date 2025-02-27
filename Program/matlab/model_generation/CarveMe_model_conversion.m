@@ -7,7 +7,8 @@ topDir = '~/IMIC';
 ecTransFile = fullfile(tablesDir, 'corrected-EC-numbers.csv');
 coFactorFile = fullfile(tablesDir, 'cofactors_from_KEGG.csv');
 formulaeFile = fullfile(tablesDir, 'MNXref', 'MNXref_MET_FORMULAE.csv');
-geneIDFile = fullfile(topDir, 'table/abundance_table','rna_ab_and_geneID_1-1_0h_1.csv');
+geneIDFile = fullfile(topDir, 'table/abundance_table','rna_ab_and_geneID_20d.csv')
+%geneIDFile = fullfile(topDir, 'table/abundance_table','rna_ab_and_geneID_1-1_0h_1.csv');
 
 ID_list = readtable(geneIDFile, 'ReadVariableNames',true);
 formulaTab = readtable(formulaeFile, 'ReadVariableNames', true, 'Delimiter', '\t');
