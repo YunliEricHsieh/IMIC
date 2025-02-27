@@ -2,7 +2,7 @@
 %% KBase
 % Tables
 tablesDir = '~/IMIC/Program/matlab/COMMIT/data/tables';
-topDir = '~/IMIC/study_case';
+topDir = '~/IMIC';
 
 ModelSEEDRxnEC = fullfile(tablesDir, 'ModelSEED_RXN_EC.csv');
 formulaeFile = fullfile(tablesDir, 'MNXref', 'MNXref_MET_FORMULAE.csv');
@@ -15,13 +15,13 @@ translationDB = loadTranslationDB;
 
 fprintf('################# Converting KBase draft models #################\n')
   
-KBaseModelDir = fullfile(topDir, 'models/kbase');
-DraftWorkspace = fullfile(topDir, 'models/kbase/kbase_models_draft.mat');
+KBaseModelDir = fullfile(topDir, 'models/kbase/draft');
+DraftWorkspace = fullfile(topDir, 'models/kbase/draft/kbase_models_draft.mat');
 ModelWorkspace = fullfile(topDir, 'models/kbase/kbase_models.mat');
 KBaseModels = dir(fullfile(KBaseModelDir, '*.xml'));
 KBaseModels = {KBaseModels.name};
 %names = cellfun(@(x)regexp(x, strcat('KG*[0-9]*[^\.]*'), 'match'),KBaseModels);
-names = cellfun(@(x)regexp(x, '\w*_re', 'match'),KBaseModels);
+names = cellfun(@(x)regexp(x, '\w*.xml', 'match'),KBaseModels);
 
 n = numel(KBaseModels);
     
