@@ -18,8 +18,8 @@ for i = 1:length(gene)
     t = char(gene{i,2});
     inx = strfind(t,'.');
 
-    %gene{i,2} = t(1:inx(2)-1);
-    gene{i,2} = t(1:inx(1)-1);
+    gene{i,2} = t(1:inx(2)-1);
+    %gene{i,2} = t(1:inx(1)-1);
 end
 
 Geneid = replace(ID_list.Geneid,'_','.');
