@@ -9,7 +9,8 @@ delete(gcp('nocreate'))
 P = parpool(c);
 
 methods = {'carveme', 'gapseq', 'kbase'};
-modelTopDir = '~/IMIC/study_case/models';
+modelTopDir = '~/IMIC/models';
+%modelTopDir = '~/IMIC/study_case/models';
 
 disp('-------------------------------------------------------------------')
 disp('START')
