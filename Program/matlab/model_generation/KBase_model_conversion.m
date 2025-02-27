@@ -46,8 +46,8 @@ for j=1:n
     models{j}.genes =  erase(models{j}.genes, 'gene-');
     models{j}.genes =  erase(models{j}.genes, '.CDS');
     % Change model ID
-    %models{j}.modelID =  strcat('KG_',num2str(sscanf(extractBefore(models{j}.description,'_'),'KG%d')));
-    models{j}.modelID = extractBefore(models{j}.description,'_');
+    models{j}.modelID =  strcat('KG_',num2str(sscanf(extractBefore(models{j}.description,'.xml'),'KG%d')));
+    %models{j}.modelID = extractBefore(models{j}.description,'_');
 end
     
 save(DraftWorkspace, 'models')
