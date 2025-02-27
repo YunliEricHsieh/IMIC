@@ -2,10 +2,11 @@
 %% gapseq
 % Tables
 tablesDir = '~/IMIC/Program/matlab/COMMIT/data/tables';
-topDir = '~/IMIC/study_case';
+topDir = '~/IMIC';
 
 formulaeFile = fullfile(tablesDir, 'MNXref', 'MNXref_MET_FORMULAE.csv');
-geneIDFile = fullfile(topDir, 'table','rna_ab_and_geneID_1-1_0h_1.csv');
+geneIDFile = fullfile(topDir, 'table/abundance_table','rna_ab_and_geneID_20d.csv');
+%geneIDFile = fullfile(topDir, 'table','rna_ab_and_geneID_1-1_0h_1.csv');
 
 ID_list = readtable(geneIDFile, 'ReadVariableNames',true);
 formulaTab = readtable(formulaeFile, 'ReadVariableNames', true, 'Delimiter', '\t');
@@ -13,8 +14,8 @@ translationDB = loadTranslationDB;
 
 fprintf('################# Converting gapseq draft models #################\n')
   
-gapseqModelDir = fullfile(topDir, 'models/gapseq');
-DraftWorkspace = fullfile(topDir, 'models/gapseq/gapseq_models_draft.mat');
+gapseqModelDir = fullfile(topDir, 'models/gapseq/draft');
+DraftWorkspace = fullfile(topDir, 'models/gapseq/draft/gapseq_models_draft.mat');
 ModelWorkspace = fullfile(topDir, 'models/gapseq/gapseq_models.mat');
 gapseqModels = dir(fullfile(gapseqModelDir, '*.xml'));
 gapseqModels = {gapseqModels.name};
