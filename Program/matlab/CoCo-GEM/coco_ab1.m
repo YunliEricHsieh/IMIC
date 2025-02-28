@@ -142,6 +142,8 @@ for i = 1:numel(biomass_rxns)
     H(biomass_rxns(i),biomass_rxns(i)) = 1;
 end
 
+params.Threads = 1;
+
 % using Gurobi solver
 problem.Q = sparse(H);
 problem.A = [Aeq; A_ineq];
@@ -153,7 +155,7 @@ problem.sense = [repelem('=',size(beq,1),1); repelem('<',size(b_ineq,1),1)];
 problem.vtype = repelem('C',size(Aeq,2),1);
 problem.modelsense = 'min';
 
-com_solution = gurobi(problem);
+com_solution = gurobi(problem, params);
 
 %com_solution = quadprog(H,f,Aineq,bineq,Aeq,beq,lb,ub)
 end

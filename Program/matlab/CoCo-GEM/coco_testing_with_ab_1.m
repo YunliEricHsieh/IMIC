@@ -7,6 +7,7 @@ timepoint = {'20d', '40d', '60d', '90d', '180d'};
 ncpu = 20;
 delete(gcp('nocreate'));
 parpool(ncpu);
+parfevalOnAll(@maxNumCompThreads, 0, 1); 
 
 alpha = 1;
 delta = [10,20,30,40,50,60,70,80,90,100];
