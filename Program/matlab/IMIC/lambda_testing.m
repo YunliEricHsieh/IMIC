@@ -6,6 +6,7 @@ methods = {'consensus','carveme','gapseq','kbase'};
 ncpu = 20;
 delete(gcp('nocreate'));
 parpool(ncpu);
+parfevalOnAll(@maxNumCompThreads, 0, 2); 
 
 % testing the different value of lambda
 lambda = [0.1,0.5,1,2,3,4,5,6,7,8,9,10,12,14,15,16,18,20,22,24,25,50,75,100];
@@ -27,7 +28,7 @@ for i = 1:numel(methods)
         transcriptFile = fullfile(tablesDir, 'abundance_table', ['rna_ab_and_geneID_', timepoint{j}, '.csv']);
         transcriptTable = readtable(transcriptFile, 'ReadVariableNames', true);
     
-        for k = 1:numel(lambda)
+        parfor k = 1:numel(lambda)
             disp('Calculate Community Growth Rate')
             com_solution = IMIC(com_model, transcriptTable, lambda(k));
 

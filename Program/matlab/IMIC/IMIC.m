@@ -87,6 +87,8 @@ f = [zeros(size(model.S,2),1); ones(size(express_value,2)*2,1)*lambda];
 bio = find(contains(model.rxns,'BIOMASS_Reaction'));
 f(bio) = -1;
 
+params.Threads = 2;
+
 % using Gurobi solver
 problem.A = [Aeq; A_ineq];
 problem.rhs = [beq; b_ineq];
@@ -96,6 +98,6 @@ problem.ub = ub;
 problem.sense = [repelem('=',size(beq,1),1); repelem('<',size(b_ineq,1),1)];
 problem.vtype = repelem('C',size(Aeq,2),1);
 
-solution = gurobi(problem);
+solution = gurobi(problem, params);
 
 end
