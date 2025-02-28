@@ -7,6 +7,7 @@ timepoint = {'20d', '40d', '60d', '90d', '180d'};
 ncpu = 20;
 delete(gcp('nocreate'));
 parpool(ncpu);
+parfevalOnAll(@maxNumCompThreads, 0, 1); 
 
 % testing different parameter value
 %alpha = [0.3,0.5,0.7,0.9];
