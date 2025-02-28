@@ -10,6 +10,7 @@ lambda = [0.1,0.5,1,2,3,4,5,6,7,8,9,10,12,14,15,16,18,20,22,24,25,50,75,100];
 ncpu = 20;
 delete(gcp('nocreate'));
 parpool(ncpu);
+parfevalOnAll(@maxNumCompThreads, 0, 2);
 
 for k = 1:numel(methods)
     % load models
