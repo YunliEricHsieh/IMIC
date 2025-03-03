@@ -84,15 +84,16 @@ for k = 1:numel(methods)
         for j = 1:numel(model.rxns)
 
             % reaction formula
-            rxn_formula = char(printRxnFormula(model,model.rxns(j)));
-            
-            % add reaction into community model
-            com_model = addReaction(com_model,model.rxns{j},'reactionFormula',rxn_formula,... 
-                                'geneRule', model.grRules{j});
+            rxn_formula = char(printRxnFormula(model,model.rxns(j), false));
 
-            % add EC number into the community model
-            if ~ismissing(model.EC(j))
 
+            if sum(ismember(com_model.rxns, model.rxns{j})) == 0
+                % add reaction into community model
+                disp(['Add reaction: ', model.rxns{j}])
+
+                com_model = addReaction(com_model,model.rxns{j},'reactionFormula',rxn_formula);
+
+                % add EC number into the community model
                 % find the reaction ID
                 rxnID = model.rxns{j};
 
@@ -101,15 +102,27 @@ for k = 1:numel(methods)
 
                 % add EC number into the community model
                 com_model.EC(index) = model.EC(j);
-            end
 
+                % add GPR rules into the community model
+                com_model.grRules(index) = model.grRules(j);
+
+            end
         end
-    
+
+        % add genes into the community model
+        com_model.genes = unique([com_model.genes; model.genes]);
+       
         com_model.comps(i) = {['c_',num]};
         com_model.compNames(i) = {['cytosol_',num]};
 
         clear num model
     end
+
+    % remove rules field
+    com_model = rmfield(com_model, 'rules');
+
+    % create rules field
+    com_model = generateRules(com_model);
 
     % add 'extracellular space' into compNames
     com_model.comps(numel(GF)+1) = {'e'};
