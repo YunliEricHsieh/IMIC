@@ -10,8 +10,8 @@ parpool(ncpu);
 parfevalOnAll(@maxNumCompThreads, 0, 1); 
 
 % testing different parameter value
-%alpha = [0.3,0.5,0.7,0.9];
-alpha = [0.5];
+alpha = [0.3,0.5,0.7,0.9];
+%alpha = [0.5];
 delta = [10,20,30,40,50,60,70,80,90,100];
 gamma = [10,20,30,40,50,60,70,80,90,100];
 
