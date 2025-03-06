@@ -102,6 +102,6 @@ for m = 1:numel(methods)
         alphas = {'0.3','0.5','0.7','0.9', '1'};
         %alphas = {'0.5'};
         % Save the final results
-        writematrix(results, fullfile(tablesDir, 'parameter_test', [methods{m},'_coco_test_alpha_', alphas{l},'.csv']));
+        writecell(results, fullfile(tablesDir, 'parameter_test', [methods{m},'_coco_test_alpha_', alphas{l},'.csv']));
     end
 end
