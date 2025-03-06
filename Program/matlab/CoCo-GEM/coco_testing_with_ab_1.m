@@ -96,7 +96,7 @@ for l = 1:numel(methods)
         ID_info = vertcat(genome_ID{:});
 
         % combine all the output data
-        results = [ID_info, num2cell(ab_info), num2cell(rep_info), num2cell(results)]
+        results = [ID_info, num2cell(ab_info), num2cell(rep_info), num2cell(results)];
 
         alphas = {'0.3','0.5','0.7','0.9', '1'};
         %alphas = {'0.5'};
