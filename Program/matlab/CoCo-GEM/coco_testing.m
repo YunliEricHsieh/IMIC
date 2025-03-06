@@ -24,9 +24,9 @@ for m = 1:numel(methods)
     for l = 1:numel(alpha)
 
         % create the abundance cell and genome ID cell
-        ab_cell = cell(14*numel(timepoint), 1);
-        rep_cell = cell(14*numel(timepoint), 1);
-        genome_ID = cell(14*numel(timepoint), 1);
+        ab_cell = cell(numel(timepoint), 1);
+        rep_cell = cell(numel(timepoint), 1);
+        genome_ID = cell(numel(timepoint), 1);
 
         results = [];
 
@@ -76,8 +76,8 @@ for m = 1:numel(methods)
             rep_table = [];
             genome_table = [];
 
-            for k = 1:numel(bio_rxn)
-                num = extractAfter(bio_rxn{k}, 'BIOMASS_Reaction_');
+            for p = 1:numel(bio_rxn)
+                num = extractAfter(bio_rxn{p}, 'BIOMASS_Reaction_');
                 ab = abTable.relative_ab(find(contains(abTable.Genome,['KG',num,'_genomic'])));
                 rep = abTable.replication_rate(find(contains(abTable.Genome,['KG',num,'_genomic'])));
                 ID = abTable.Genome(find(contains(abTable.Genome,['KG',num,'_genomic'])));
@@ -87,9 +87,9 @@ for m = 1:numel(methods)
                 genome_table = [genome_table; ID];
             end
         
-            ab_cell{j,1} = ab_table;
-            rep_cell{j,1} = rep_table;
-            genome_ID{j,1} = genome_table;
+            ab_cell{i,1} = ab_table;
+            rep_cell{i,1} = rep_table;
+            genome_ID{i,1} = genome_table;
         end
 
         ab_info = vertcat(ab_cell{:});
