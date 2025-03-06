@@ -86,7 +86,7 @@ for i = 1:numel(methods)
         'L = 24', 'L = 25', 'L = 50', 'L = 75', 'L = 100'};
 
     results_table = [table1, table2];
-    writetable(results_table, fullfile(tablesDir, 'parameter_test', [methods{i},'_lambda_test_resutls.csv']));
+    writetable(results_table, fullfile(tablesDir, 'parameter_test', [methods{i},'_lambda_test_results.csv']));
     clear results_table results tmp_results
 end
 
