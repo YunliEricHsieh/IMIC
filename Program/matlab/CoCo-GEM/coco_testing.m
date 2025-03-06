@@ -10,7 +10,7 @@ parpool(ncpu);
 parfevalOnAll(@maxNumCompThreads, 0, 1); 
 
 % testing different parameter value
-alpha = [0.3,0.5,0.7,0.9];
+alpha = [0.3,0.5,0.7,0.9, 1];
 %alpha = [0.5];
 delta = [10,20,30,40,50,60,70,80,90,100];
 gamma = [10,20,30,40,50,60,70,80,90,100];
@@ -21,9 +21,14 @@ for m = 1:numel(methods)
     model_workspace = fullfile(modelDir, [methods{m},'_com.mat']);
     load(model_workspace)
 
-    results = [];
-
     for l = 1:numel(alpha)
+
+        % create the abundance cell and genome ID cell
+        ab_cell = cell(14*numel(timepoint), 1);
+        rep_cell = cell(14*numel(timepoint), 1);
+        genome_ID = cell(14*numel(timepoint), 1);
+
+        results = [];
 
         for i = 1:numel(timepoint)
             disp('----------------------------------------------------------------------')
@@ -34,7 +39,12 @@ for m = 1:numel(methods)
     
             abTable = readtable(abFile, 'ReadVariableNames', true);
             transcriptTable = readtable(transcriptFile, 'ReadVariableNames', true);
-    
+
+            % check if 'replication_rate' is double or not
+            if iscell(abTable.replication_rate)
+                abTable.replication_rate = cellfun(@str2double, abTable.replication_rate);
+            end
+
             disp('Calculate Max Growth Rate with coco')
             coc_solution = MICOM_max_growth(com_model, abTable);
             coco_max_growth = -coc_solution.objval;
@@ -58,11 +68,39 @@ for m = 1:numel(methods)
             end
 
             % Flatten and concatenate the tmp_results to the main results
-            results = [results; tmp_results]; 
+            results = [results; tmp_results];
+
+            % find the biomass reactions
+            bio_rxn = com_model.rxns(contains(com_model.rxns, 'BIOMASS_R'));
+            ab_table = [];
+            rep_table = [];
+            genome_table = [];
+
+            for k = 1:numel(bio_rxn)
+                num = extractAfter(bio_rxn{k}, 'BIOMASS_Reaction_');
+                ab = abTable.relative_ab(find(contains(abTable.Genome,['KG',num,'_genomic'])));
+                rep = abTable.replication_rate(find(contains(abTable.Genome,['KG',num,'_genomic'])));
+                ID = abTable.Genome(find(contains(abTable.Genome,['KG',num,'_genomic'])));
+
+                ab_table = [ab_table; ab];
+                rep_table = [rep_table; rep];
+                genome_table = [genome_table; ID];
+            end
+        
+            ab_cell{j,1} = ab_table;
+            rep_cell{j,1} = rep_table;
+            genome_ID{j,1} = genome_table;
         end
 
-        %alphas = {'0.3','0.5','0.7','0.9'};
-        alphas = {'0.5'};
+        ab_info = vertcat(ab_cell{:});
+        rep_info = vertcat(rep_cell{:});
+        ID_info = vertcat(genome_ID{:});
+
+        % combine all the output data
+        results = [ID_info, num2cell(ab_info), num2cell(rep_info), num2cell(results)]
+
+        alphas = {'0.3','0.5','0.7','0.9', '1'};
+        %alphas = {'0.5'};
         % Save the final results
         writematrix(results, fullfile(tablesDir, 'parameter_test', [methods{m},'_coco_test_alpha_', alphas{l},'.csv']));
     end
