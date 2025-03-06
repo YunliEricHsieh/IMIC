@@ -22,9 +22,9 @@ for i = 1:numel(methods)
         micom_ab1_cell = cell(numel(timepoint),1);
 
         % create the abundance cell and genome ID cell
-        ab_cell = cell(14*numel(timepoint), 1);
-        rep_cell = cell(14*numel(timepoint), 1);
-        genome_ID = cell(14*numel(timepoint), 1);
+        ab_cell = cell(numel(timepoint), 1);
+        rep_cell = cell(numel(timepoint), 1);
+        genome_ID = cell(numel(timepoint), 1);
 
         parfor j = 1:numel(timepoint)
             restoreEnvironment(environment);
@@ -35,6 +35,11 @@ for i = 1:numel(methods)
         
             abFile = fullfile(tablesDir, 'abundance_table', ['relative_ab_',timepoint{j}, '.csv']); 
             abTable = readtable(abFile, 'ReadVariableNames', true);
+
+            % check if 'replication_rate' is double or not
+            if iscell(abTable.replication_rate)
+                abTable.replication_rate = cellfun(@str2double, abTable.replication_rate);
+            end
 
             disp('Calculate Max Growth Rate with coco')
             micom_solution = MICOM_max_growth(com_model, abTable);
