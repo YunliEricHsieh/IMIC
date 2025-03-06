@@ -20,6 +20,11 @@ for i = 1:numel(methods)
     micom_cell = cell(numel(timepoint),1);
     micom_ab1_cell = cell(numel(timepoint),1);
 
+    % create the abundance cell and genome ID cell
+    ab_cell = cell(14*numel(timepoint), 1);
+    rep_cell = cell(14*numel(timepoint), 1);
+    genome_ID = cell(14*numel(timepoint), 1);
+
     parfor j = 1:numel(timepoint)
         restoreEnvironment(environment);
         changeCobraSolver('gurobi','all');
@@ -43,12 +48,37 @@ for i = 1:numel(methods)
         micom_cell{j} = com_solution.x(contains(com_model.rxns,'BIOMASS_R'));
         micom_ab1_cell{j} = com_solution1.x(contains(com_model.rxns,'BIOMASS_R'));
 
+        % find the biomass reactions
+        bio_rxn = com_model.rxns(contains(com_model.rxns, 'BIOMASS_R'));
+        ab_table = [];
+        rep_table = [];
+        genome_table = [];
+
+        for k = 1:numel(bio_rxn)
+            num = extractAfter(bio_rxn{k}, 'BIOMASS_Reaction_');
+            ab = abTable.relative_ab(find(contains(abTable.Genome,['KG',num,'_genomic'])));
+            rep = abTable.replication_rate(find(contains(abTable.Genome,['KG',num,'_genomic'])));
+            ID = abTable.Genome(find(contains(abTable.Genome,['KG',num,'_genomic'])));
+
+            ab_table = [ab_table; ab];
+            rep_table = [ab_trep_tableable; rep];
+            genome_table = [genome_table; ID];
+        end
+        
+        ab_cell{j,1} = ab_table;
+        rep_cell{j,1} = rep_table;
+        genome_ID{j,1} = genome_table;
+
     end
 
     micom_results_cells = vertcat(micom_cell{:});
     micom_ab1_results_cells = vertcat(micom_ab1_cell{:});
 
-    results = table(micom_results_cells, micom_ab1_results_cells);
-    results.Properties.VariableNames = {'MICOM','MICOM_ab1'};
+    ab_info = vertcat(ab_cell{:});
+    rep_info = vertcat(rep_cell{:});
+    ID_info = vertcat(genome_ID{:});
+    
+    results = table(ID_info, ab_info, rep_info, micom_results_cells, micom_ab1_results_cells);
+    results.Properties.VariableNames = {'ID', 'MAG_ab', 'Replication_rate', 'MICOM', 'MICOM_ab1'};
     writetable(results, fullfile(tablesDir,'predicted_growth',[methods{i},'_MICOM_results_table.csv']));
 end
