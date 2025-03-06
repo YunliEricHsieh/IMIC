@@ -4,8 +4,9 @@ tablesDir = '~/IMIC/table';
 methods = {'consensus','carveme','gapseq','kbase'};
 timepoint = {'20d', '40d', '60d', '90d', '180d'};
 
-% set up the trade-off parameter
-alpha = [0.3,0.5,0.7,0.9, 1];
+% set up the trade-off parameter for each methods
+alpha1 = [0.9,0.5,0.5,0.5]; 
+alpha2 = [0.5,0.7,0.3,0.9]; % ab = 1
 
 ncpu = 20;
 delete(gcp('nocreate'));
@@ -19,7 +20,7 @@ for i = 1:numel(methods)
     model_workspace = fullfile(modelDir, [methods{i},'_com.mat']);
     load(model_workspace)
 
-    for l = 1:numel(alpha)
+    % for l = 1:numel(alpha)
         micom_cell = cell(numel(timepoint),1);
         micom_ab1_cell = cell(numel(timepoint),1);
 
@@ -48,10 +49,10 @@ for i = 1:numel(methods)
             micom_max_growth = -micom_solution.objval;
 
             disp('Calculate Community Growth Rate with coco')
-            com_solution = MICOM(com_model, micom_max_growth, abTable, alpha(l));
+            com_solution = MICOM(com_model, micom_max_growth, abTable, alpha1(i));
 
             % MICOM without abundance info
-            com_solution1 = MICOM_ab1(com_model, alpha(l));
+            com_solution1 = MICOM_ab1(com_model, alpha2(i));
 
             if isfield(com_solution, 'x') && ~contains(com_solution.status, 'NUMERIC')
                 micom_cell{j} = com_solution.x(contains(com_model.rxns,'BIOMASS_R'));
@@ -95,10 +96,11 @@ for i = 1:numel(methods)
         rep_info = vertcat(rep_cell{:});
         ID_info = vertcat(genome_ID{:});
     
-        alphas = {'0.3','0.5','0.7','0.9', '1'};
+        % alphas = {'0.3','0.5','0.7','0.9', '1'};
 
         results = table(ID_info, ab_info, rep_info, micom_results_cells, micom_ab1_results_cells);
         results.Properties.VariableNames = {'ID', 'MAG_ab', 'Replication_rate', 'MICOM', 'MICOM_ab1'};
-        writetable(results, fullfile(tablesDir,'predicted_growth',[methods{i},'_MICOM_results_table_', alphas{l},'.csv']));
-    end
+        writetable(results, fullfile(tablesDir,'predicted_growth',[methods{i},'_MICOM_results_table.csv']));
+        % writetable(results, fullfile(tablesDir,'predicted_growth',[methods{i},'_MICOM_results_table_', alphas{l},'.csv']));
+    % end
 end
