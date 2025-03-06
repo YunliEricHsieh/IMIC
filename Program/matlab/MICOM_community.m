@@ -12,6 +12,8 @@ delete(gcp('nocreate'));
 parpool(ncpu);
 environment = getEnvironment();
 
+null_v = NaN(14,1);
+
 for i = 1:numel(methods)
     % load models
     model_workspace = fullfile(modelDir, [methods{i},'_com.mat']);
@@ -51,9 +53,18 @@ for i = 1:numel(methods)
             % MICOM without abundance info
             com_solution1 = MICOM_ab1(com_model, 1);
 
-            micom_cell{j} = com_solution.x(contains(com_model.rxns,'BIOMASS_R'));
-            micom_ab1_cell{j} = com_solution1.x(contains(com_model.rxns,'BIOMASS_R'));
+            if isfield(com_solution, 'x') && ~contains(com_solution.status, 'NUMERIC')
+                micom_cell{j} = com_solution.x(contains(com_model.rxns,'BIOMASS_R'));
+            else
+                micom_cell{j} = null_v;
+            end
 
+            if isfield(com_solution1, 'x') && ~contains(com_solution1.status, 'NUMERIC')
+                micom_ab1_cell{j} = com_solution1.x(contains(com_model.rxns,'BIOMASS_R'));
+            else
+                micom_ab1_cell{j} = null_v;
+            end
+            
             % find the biomass reactions
             bio_rxn = com_model.rxns(contains(com_model.rxns, 'BIOMASS_R'));
             ab_table = [];
