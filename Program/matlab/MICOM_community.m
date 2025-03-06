@@ -51,7 +51,7 @@ for i = 1:numel(methods)
             com_solution = MICOM(com_model, micom_max_growth, abTable, alpha(l));
 
             % MICOM without abundance info
-            com_solution1 = MICOM_ab1(com_model, 1);
+            com_solution1 = MICOM_ab1(com_model, alpha(l));
 
             if isfield(com_solution, 'x') && ~contains(com_solution.status, 'NUMERIC')
                 micom_cell{j} = com_solution.x(contains(com_model.rxns,'BIOMASS_R'));
