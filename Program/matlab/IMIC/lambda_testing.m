@@ -27,6 +27,15 @@ for i = 1:numel(methods)
         tmp_results = [];
         transcriptFile = fullfile(tablesDir, 'abundance_table', ['rna_ab_and_geneID_', timepoint{j}, '.csv']);
         transcriptTable = readtable(transcriptFile, 'ReadVariableNames', true);
+
+        % integrate the abundance info into the final result tables
+        abFile = fullfile(tablesDir, 'abundance_table', ['relative_ab_',timepoint{j}, '.csv']); 
+        abTable = readtable(abFile, 'ReadVariableNames', true);
+
+        % check if 'replication_rate' is double or not
+        if iscell(abTable.replication_rate)
+            abTable.replication_rate = cellfun(@str2double, abTable.replication_rate);
+        end
     
         parfor k = 1:numel(lambda)
             disp('Calculate Community Growth Rate')
@@ -40,13 +49,43 @@ for i = 1:numel(methods)
         end
     
         results = [results; tmp_results];
+
+        % find the biomass reactions
+        bio_rxn = com_model.rxns(contains(com_model.rxns, 'BIOMASS_R'));
+        ab_table = [];
+        rep_table = [];
+        genome_table = [];
+
+        for k = 1:numel(bio_rxn)
+            num = extractAfter(bio_rxn{k}, 'BIOMASS_Reaction_');
+            ab = abTable.relative_ab(find(contains(abTable.Genome,['KG',num,'_genomic'])));
+            rep = abTable.replication_rate(find(contains(abTable.Genome,['KG',num,'_genomic'])));
+            ID = abTable.Genome(find(contains(abTable.Genome,['KG',num,'_genomic'])));
+
+            ab_table = [ab_table; ab];
+            rep_table = [rep_table; rep];
+            genome_table = [genome_table; ID];
+        end
+        
+        ab_cell{j,1} = ab_table;
+        rep_cell{j,1} = rep_table;
+        genome_ID{j,1} = genome_table;        
     end
 
-    results_table = array2table(results);
-    results_table.Properties.VariableNames = {'L = 0,1','L = 0.5','L = 1','L = 2','L = 3','L = 4','L = 5','L = 6', ...
+    ab_info = vertcat(ab_cell{:});
+    rep_info = vertcat(rep_cell{:});
+    ID_info = vertcat(genome_ID{:});
+
+    table1 = table(ID_info, ab_info, rep_info);
+    table1.Properties.VariableNames = {'ID', 'MAG_ab', 'Replication_rate'};
+
+    table2 = array2table(results);
+    table2.Properties.VariableNames = {'L = 0,1','L = 0.5','L = 1','L = 2','L = 3','L = 4','L = 5','L = 6', ...
         'L = 7','L = 8','L = 9','L = 10', 'L = 12', ...
         'L = 14', 'L = 15', 'L = 16', 'L = 18', 'L = 20', 'L = 22', ...
         'L = 24', 'L = 25', 'L = 50', 'L = 75', 'L = 100'};
+
+    results_table = [table1, table2];
     writetable(results_table, fullfile(tablesDir, 'parameter_test', [methods{i},'_lambda_test_resutls.csv']));
     clear results_table results tmp_results
 end
