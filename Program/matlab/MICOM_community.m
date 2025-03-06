@@ -62,7 +62,7 @@ for i = 1:numel(methods)
                 ID = abTable.Genome(find(contains(abTable.Genome,['KG',num,'_genomic'])));
 
                 ab_table = [ab_table; ab];
-                rep_table = [ab_trep_tableable; rep];
+                rep_table = [rep_table; rep];
                 genome_table = [genome_table; ID];
             end
         
@@ -80,7 +80,7 @@ for i = 1:numel(methods)
         ID_info = vertcat(genome_ID{:});
     
         alphas = {'0.3','0.5','0.7','0.9', '1'};
-        
+
         results = table(ID_info, ab_info, rep_info, micom_results_cells, micom_ab1_results_cells);
         results.Properties.VariableNames = {'ID', 'MAG_ab', 'Replication_rate', 'MICOM', 'MICOM_ab1'};
         writetable(results, fullfile(tablesDir,'predicted_growth',[methods{i},'_MICOM_results_table_', alphas{l},'.csv']));
