@@ -4,9 +4,9 @@ methods = {'consensus','carveme','gapseq','kbase'};
 timepoint = {'20d', '40d', '60d', '90d', '180d'};
 
 % set up the parameters
-delta = 10; % CoCo
-gamma = 30; % CoCo
-alpha = 0.5; % CoCo
+delta = [90, 100, 50, 10]; % CoCo for each methods
+gamma = [60, 10, 10, 10]; % CoCo for each methods
+alpha = [0.9, 0.5, 0.5, 0.5]; % CoCo for each methods
 lambda = 12; % IMIC
 
 null_v = zeros(14,1);
@@ -22,6 +22,11 @@ for i = 1:numel(methods)
     
     coco_cell = cell(numel(timepoint), 1);
     imic_cell = cell(numel(timepoint), 1);
+
+    % create the abundance cell and genome ID cell
+    ab_cell = cell(numel(timepoint), 1);
+    rep_cell = cell(numel(timepoint), 1);
+    genome_ID = cell(numel(timepoint), 1);
     
     parfor j = 1:numel(timepoint)
         disp('----------------------------------------------------------------------')
@@ -40,7 +45,7 @@ for i = 1:numel(methods)
 
         disp('Calculate Community Growth Rate with coco')
         coco_com_solution = coco(com_model, coco_max_growth, ...
-            transcriptTable, abTable, alpha, delta, gamma);
+            transcriptTable, abTable, alpha(i), delta(i), gamma(i));
 
         if isfield(coco_com_solution, 'x') && ~contains(coco_com_solution.status, 'NUMERIC')
             coco_cell{j} = coco_com_solution.x(contains(com_model.rxns,'BIOMASS_R'));
@@ -56,14 +61,39 @@ for i = 1:numel(methods)
         else
             imic_cell{j} = null_v;
         end
+
+        % find the biomass reactions
+        bio_rxn = com_model.rxns(contains(com_model.rxns, 'BIOMASS_R'));
+        ab_table = [];
+        rep_table = [];
+        genome_table = [];
+
+        for k = 1:numel(bio_rxn)
+            num = extractAfter(bio_rxn{k}, 'BIOMASS_Reaction_');
+            ab = abTable.relative_ab(find(contains(abTable.Genome,['KG',num,'_genomic'])));
+            rep = abTable.replication_rate(find(contains(abTable.Genome,['KG',num,'_genomic'])));
+            ID = abTable.Genome(find(contains(abTable.Genome,['KG',num,'_genomic'])));
+
+            ab_table = [ab_table; ab];
+            rep_table = [rep_table; rep];
+            genome_table = [genome_table; ID];
+        end
+        
+        ab_cell{j,1} = ab_table;
+        rep_cell{j,1} = rep_table;
+        genome_ID{j,1} = genome_table;
                 
     end
     
     coco_results_cells = vertcat(coco_cell{:});
     imic_results_cells = vertcat(imic_cell{:});
 
-    results = table(coco_results_cells,imic_results_cells);
-    results.Properties.VariableNames = {'CoCo','IMIC'};
+    ab_info = vertcat(ab_cell{:});
+    rep_info = vertcat(rep_cell{:});
+    ID_info = vertcat(genome_ID{:});
+
+    results = table(ID_info, ab_info, rep_info, coco_results_cells, imic_results_cells);
+    results.Properties.VariableNames = {'ID', 'MAG_ab', 'Replication_rate', 'CoCo', 'IMIC'};
     writetable(results, fullfile(tablesDir, 'predicted_growth', [methods{i},'_results_table.csv']));
 
     clear results
