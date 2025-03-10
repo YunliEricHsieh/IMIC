@@ -5,19 +5,19 @@ micom <- read.table(paste0(topDir, 'consensus_MICOM_results_table.csv'),
 library(ggplot2)
 library(ggpubr)
 
-ab1 <- ggscatter(micom, x =  'MAG_ab', y = 'MICOM_ab_1',
+ab1 <- ggscatter(micom, x =  'MAG_ab', y = 'MICOM_ab1',
                  xlab = 'Measured relative abundance (%)',
                  ylab = '',
                  add = "reg.line",                                 # Add regression line
                  conf.int = TRUE,                                  # Add confidence interval
                  add.params = list(color = "blue",
                                    fill = "lightgray"))+
-  ylim(0,210)+
+  ylim(0,150)+
   labs(title = 'b.')+
   font("title", size = 15, face = 'bold')+
   font("xlab", size = 15)+
   font("x.text", size = 13)+
-  stat_cor(method = "spearman", label.x = 5, label.y = 180, size= 5.5, cor.coef.name = 'r')+
+  stat_cor(method = "spearman", label.x = 5, label.y = 140, size= 5.5, cor.coef.name = 'rho')+
   theme(panel.border = element_rect(color = 'black', size = 1, fill = NA),
         axis.text.y = element_blank())
 
@@ -30,14 +30,14 @@ ab <- ggscatter(micom, x =  'MAG_ab', y = 'MICOM',
                 conf.int = TRUE,                                  # Add confidence interval
                 add.params = list(color = "blue",
                                   fill = "lightgray"))+
-  ylim(0,210)+
+  ylim(0,150)+
   labs(title = 'a.')+
   font("ylab", size = 15)+
   font("xlab", size = 15)+
   font("title", size = 15, face = 'bold')+
   font("x.text", size = 13)+
   font("y.text", size = 13)+
-  stat_cor(method = "spearman", label.x = 5, label.y = 180, size= 5.5, cor.coef.name = 'r')+
+  stat_cor(method = "spearman", label.x = 5, label.y = 140, size= 5.5, cor.coef.name = 'rho')+
   theme(panel.border = element_rect(color = 'black', size = 1, fill = NA))
 
 ab
@@ -49,23 +49,23 @@ library(scales)
 topDir <- "~/IMIC/table/parameter_test/"
 
 ##### coco test #####
-data <- read.table(paste0(topDir, 'consensus_coco_test_alpha_0.5.csv'),
+data <- read.table(paste0(topDir, 'consensus_coco_test_alpha_0.3.csv'),
                    header = T, sep = ',')
 ##### coco test with abundance = 1 results #####
-data_ab <- read.table(paste0(topDir, 'consensus_coco_test_with_abundance_1.csv'),
+data_ab <- read.table(paste0(topDir, 'consensus_coco_test_with_abundance_1_alpha_1.csv'),
                       header = T, sep = ',')
 
 cor_result <- data.frame()
 
 # calculate the correlation
 for (i in 4:length(data)){
-  cor_r <- cor.test(data[,3],data[,i], method = 'spearman',exact = F)
+  cor_r <- cor.test(data[,2],data[,i], method = 'spearman',exact = F)
   cor_result[i-3,1] <- cor_r$estimate
 }
 
 for (i in 4:length(data_ab)){
   if (sum(is.na(data_ab[, i])) != 70){
-    cor_r <- cor.test(data_ab[,3],data_ab[,i], method = 'spearman',exact = F)
+    cor_r <- cor.test(data_ab[,2],data_ab[,i], method = 'spearman',exact = F)
     cor_result[i-3,2] <- cor_r$estimate
   }
   else {
@@ -184,7 +184,7 @@ consensus <- read.table(paste0(topDir, 'consensus_lambda_test_results.csv'),
 cor_result <- data.frame()
 
 for (i in 4:length(consensus)){
-  cor_r <- cor.test(consensus[,3],consensus[,i], method = 'spearman',exact = F)
+  cor_r <- cor.test(consensus[,2],consensus[,i], method = 'spearman',exact = F)
   cor_result[i-3,1] <- cor_r$estimate
   cor_result[i-3,2] <- cor_r$p.value
 }
@@ -233,7 +233,7 @@ f <- ggscatter(data, x =  'MAG_ab', y = 'IMIC',
   font('ylab', size = 15)+
   font("x.text", size = 15)+
   font('xlab', size = 15)+
-  stat_cor(method = "spearman", label.x = 20, label.y = 40, size= 5.5, cor.coef.name = 'r')+
+  stat_cor(method = "spearman", label.x = 20, label.y = 40, size= 5.5, cor.coef.name = 'rho')+
   theme(panel.border = element_rect(color = 'black', size = 1, fill = NA),)
 
 f
