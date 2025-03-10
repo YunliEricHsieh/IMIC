@@ -8,9 +8,9 @@ model_workspace = fullfile(modelDir, 'consensus_com.mat');
 load(model_workspace);
 
 % set up the parameters
-delta = 10; % CoCo
-gamma = 80; % CoCo
-alpha = 0.5; % CoCo
+delta = 30; % CoCo
+gamma = 100; % CoCo
+alpha = 0.3; % CoCo
 lambda = 12; % IMIC
 
 ncpu = 5;

@@ -109,7 +109,7 @@ for i = 1:numel(timepoint)
     [c_pvalues, c_alpha, h] = fdr_BH(flux_cor_p(:,i), 0.05);
 
     % find h = 1 (H0 is rejected) and correlation coefficient > 0.7 
-    tmp_rxn{i} = rxn_list(find(h == 1 & flux_cor(:,i) > 0.75));
+    tmp_rxn{i} = rxn_list(find(h == 1 & flux_cor(:,i) > 0.7));
 end
 
 % find the intersection over all timepoint (except for timepoint 4)
@@ -154,7 +154,6 @@ result_table.Properties.VariableNames = {'Ab_info_1','Ab_info_2','Ab_info_3','Ab
     'expression_1','expression_2','expression_3','expression_4','expression_5'};
 
 writetable(result_table, fullfile(tablesDir,'key_reaction','flux_value_of_key_rxns.csv'));
-
 
 %% testing the impact of these reaction on community growth
 ncpu = 20;

@@ -98,6 +98,7 @@ problem.lb = lb;
 problem.ub = ub;
 problem.sense = [repelem('=',size(beq,1),1); repelem('<',size(b_ineq,1),1)];
 problem.vtype = repelem('C',size(Aeq,2),1);
+params.FeasibilityTol = 1e-5;
 
 results_table = {};
 for i = 1:numel(MAG_ID)
@@ -113,7 +114,7 @@ for i = 1:numel(MAG_ID)
     % maximum growth rate
     f(bio) = -1;
     problem.obj = f;
-    solution_max = gurobi(problem);
+    solution_max = gurobi(problem, params);
 
     if contains(solution_max.status, 'INFEASIBLE')
         solution_max.objval = 'NA';
@@ -124,7 +125,7 @@ for i = 1:numel(MAG_ID)
     % minimum growth rate
     f(bio) = 1;
     problem.obj = f;
-    solution_min = gurobi(problem);
+    solution_min = gurobi(problem, params);
 
     if contains(solution_min.status, 'INFEASIBLE')
         solution_min.objval = 'NA';

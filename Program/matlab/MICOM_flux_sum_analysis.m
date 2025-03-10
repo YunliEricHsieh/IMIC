@@ -32,7 +32,7 @@ timepoint = {'20d', '40d', '60d', '90d', '180d'};
 model_workspace = fullfile(modelDir, 'consensus_com.mat');
 load(model_workspace);
 
-alpha = 0.5;
+alpha = 0.3;
 
 % find transport reactions according to the rxn description
 keywords = {'exchange', 'transport', 'import', 'export'};
