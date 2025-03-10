@@ -4,9 +4,9 @@ methods = {'consensus','carveme','gapseq','kbase'};
 timepoint = {'20d', '40d', '60d', '90d', '180d'};
 
 % set up the parameters
-delta = [90, 100, 50, 10]; % CoCo for each methods
-gamma = [60, 10, 10, 10]; % CoCo for each methods
-alpha = [0.9, 0.5, 0.5, 0.5]; % CoCo for each methods
+delta = [30, 100, 50, 10]; % CoCo for each methods
+gamma = [100, 10, 10, 10]; % CoCo for each methods
+alpha = [0.3, 0.5, 0.5, 0.5]; % CoCo for each methods
 lambda = 12; % IMIC
 
 null_v = zeros(14,1);
