@@ -37,6 +37,11 @@ for i = 1:numel(methods)
     
         abTable = readtable(abFile, 'ReadVariableNames', true);
         transcriptTable = readtable(transcriptFile, 'ReadVariableNames', true);
+
+        % check if 'replication_rate' is double or not
+        if iscell(abTable.replication_rate)
+            abTable.replication_rate = cellfun(@str2double, abTable.replication_rate);
+        end
         
         disp('Calculate Max Growth Rate with coco')
         micom_solution = MICOM_max_growth(com_model, abTable);
