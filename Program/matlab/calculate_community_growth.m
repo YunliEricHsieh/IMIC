@@ -12,7 +12,7 @@ lambda = 12; % IMIC
 null_v = zeros(14,1);
 null_v(:,1) = NaN;
 
-ncpu = 20;
+ncpu = 5;
 delete(gcp('nocreate'));
 parpool(ncpu);
 
