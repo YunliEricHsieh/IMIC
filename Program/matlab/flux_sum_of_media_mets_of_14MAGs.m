@@ -80,7 +80,7 @@ parfor i = 1:numel(timepoint)
     micom_solution = MICOM_max_growth(com_model, abTable);
     micom_max_growth = -micom_solution.objval;
 
-    [micom_flux_sum_value, micom_mets_ID]  = MICOM_flux_sum(model, micom_max_growth, abTable, alpha, tar_met_IDs);
+    [micom_flux_sum_value, micom_mets_ID]  = MICOM_flux_sum(com_model, micom_max_growth, abTable, alpha, tar_met_IDs);
 
     flux_sum_micom(:, i) = micom_flux_sum_value;
     metabolite_ID_micom{i} = micom_mets_ID;
