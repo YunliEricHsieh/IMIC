@@ -121,7 +121,7 @@ di <- ggplot(cor_result, aes(x = cor)) +
     panel.grid = element_blank())
 
 # Combine the plots
-c1 <- c + annotation_custom(ggplotGrob(di), xmin = 0.1, xmax = 0.8, ymin = 35, ymax = 45)
+c1 <- c + annotation_custom(ggplotGrob(di), xmin = 0.1, xmax = 0.8, ymin = 33, ymax = 47)
 
 c1
 
@@ -192,7 +192,7 @@ di_e <- ggplot(cor_result, aes(x = cor)) +
         panel.grid = element_blank())
 
 # Combine the plots
-e1 <- e + annotation_custom(ggplotGrob(di_e), xmin = 0.1, xmax = 0.8, ymin = 50, ymax = 80)
+e1 <- e + annotation_custom(ggplotGrob(di_e), xmin = 0.1, xmax = 0.8, ymin = 40, ymax = 80)
 
 e1
 
@@ -280,7 +280,7 @@ di_h <- ggplot(cor_result, aes(x = cor)) +
         panel.grid = element_blank())
 
 # Combine the plots
-h1 <- h + annotation_custom(ggplotGrob(di_h), xmin = 0.1, xmax = 0.8, ymin = 140, ymax = 200)
+h1 <- h + annotation_custom(ggplotGrob(di_h), xmin = 0.1, xmax = 0.8, ymin = 115, ymax = 200)
 
 h1
 
@@ -350,7 +350,7 @@ di_j <- ggplot(cor_result, aes(x = cor)) +
         panel.grid = element_blank())
 
 # Combine the plots
-j1 <- j + annotation_custom(ggplotGrob(di_j), xmin = 0.1, xmax = 0.8, ymin = 80, ymax = 120)
+j1 <- j + annotation_custom(ggplotGrob(di_j), xmin = 0.1, xmax = 0.8, ymin = 65, ymax = 120)
 
 j1
 
@@ -437,7 +437,7 @@ di_m <- ggplot(cor_result, aes(x = cor)) +
         panel.grid = element_blank())
 
 # Combine the plots
-m1 <- m + annotation_custom(ggplotGrob(di_m), xmin = 0.1, xmax = 0.8, ymin = 20, ymax = 50)
+m1 <- m + annotation_custom(ggplotGrob(di_m), xmin = 0.1, xmax = 0.8, ymin = 23, ymax = 50)
 
 m1
 
@@ -506,7 +506,7 @@ di_o <- ggplot(cor_result, aes(x = cor)) +
         panel.grid = element_blank())
 
 # Combine the plots
-o1 <- o + annotation_custom(ggplotGrob(di_o), xmin = 0.1, xmax = 0.8, ymin = 100, ymax = 150)
+o1 <- o + annotation_custom(ggplotGrob(di_o), xmin = 0.1, xmax = 0.8, ymin = 80, ymax = 150)
 
 o1
 
@@ -594,7 +594,7 @@ di_r <- ggplot(cor_result, aes(x = cor)) +
         panel.grid = element_blank())
 
 # Combine the plots
-r1 <- r + annotation_custom(ggplotGrob(di_r), xmin = 0.1, xmax = 0.8, ymin = 120, ymax = 170)
+r1 <- r + annotation_custom(ggplotGrob(di_r), xmin = 0.1, xmax = 0.8, ymin = 95, ymax = 170)
 
 r1
 
@@ -663,7 +663,7 @@ di_t <- ggplot(cor_result, aes(x = cor)) +
         panel.grid = element_blank())
 
 # Combine the plots
-t1 <- t + annotation_custom(ggplotGrob(di_t), xmin = 0.1, xmax = 0.8, ymin = 110, ymax = 180)
+t1 <- t + annotation_custom(ggplotGrob(di_t), xmin = 0.1, xmax = 0.8, ymin = 85, ymax = 180)
 
 t1
 

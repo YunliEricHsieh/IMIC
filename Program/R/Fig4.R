@@ -1,6 +1,6 @@
 topDir <- "~/IMIC/table/key_reaction/"
 
-data <- read.table(paste0(topDir, 'flux_value_of_core_rxns.csv'),
+data <- read.table(paste0(topDir, 'flux_value_of_key_rxns.csv'),
                    header = T, sep = ',')
 
 rxn.list <- unique(data$RxnID)
@@ -47,8 +47,11 @@ new.data$V5 <- p.adjust(new.data$V5, method="BH")
 colnames(new.data) <- c('RxnID', 'ab_cor', 'ab_adj_p', 'exp_cor', 'exp_adj_p')
 
 # add time point information
-new.data$time <- as.factor(rep(c('20d', '40d', '60d', '90d', '180d'), 23))
+new.data$time <- as.factor(rep(c('20d', '40d', '60d', '90d', '180d'), 11))
 
+library(ggplot2)
+library(ggpubr)
+library(forcats)
 
 a <- ggplot(new.data, aes(x = RxnID, y = ab_cor)) + 
   geom_boxplot(aes(group = RxnID, fill = fct_inorder(time)), alpha = 0.5, outlier.shape = NA) +
