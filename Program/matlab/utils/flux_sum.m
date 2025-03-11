@@ -112,7 +112,7 @@ mets_ID = tar_mets;
 min_flux_sum = [];
 
 % minimum flux sum analysis for each metabolite in [e]
-parfor i = 1:10
+parfor i = 1:numel(tar_mets)
 
     problem1 = problem;
 
