@@ -3,6 +3,10 @@ tablesDir = '~/IMIC/table';
 methods = {'consensus','carveme','gapseq','kbase'};
 timepoint = {'20d', '40d', '60d', '90d', '180d'};
 
+ncpu = 14;
+delete(gcp('nocreate'));
+parpool(ncpu);
+
 %% testing with the opt lambda from each methods
 lambda = [12, 20, 15, 25];
 
@@ -28,7 +32,7 @@ for i = 1:numel(methods)
         results = [results; results_table];
     end
 
-    results = cell2table(results);
+    results = cell2table(vertcat(results{:}));
     results.Properties.VariableNames = {'ModelID','Max_growth_rate','Min_growth_rate'};
     writetable(results, fullfile(tablesDir, 'variability_analysis',[methods{i},'_variability_analysis_with_opt_lambda.csv']));
 end
@@ -58,7 +62,7 @@ for i = 1:numel(methods)
         results = [results; results_table];
     end
 
-    results = cell2table(results);
+    results = cell2table(vertcat(results{:}));
     results.Properties.VariableNames = {'ModelID','Max_growth_rate','Min_growth_rate'};
     writetable(results, fullfile(tablesDir, 'variability_analysis',[methods{i},'_variability_analysis.csv']));
 end

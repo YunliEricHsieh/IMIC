@@ -1,4 +1,4 @@
- function results_table = var_analysis(model, transcriptTable, lambda, maximum_value)
+function results_table = var_analysis(model, transcriptTable, lambda, maximum_value)
 % Function for doing the variability analysis.
 % Input:
 %       model:                  community metabolic models as struct object
@@ -98,10 +98,11 @@ problem.lb = lb;
 problem.ub = ub;
 problem.sense = [repelem('=',size(beq,1),1); repelem('<',size(b_ineq,1),1)];
 problem.vtype = repelem('C',size(Aeq,2),1);
-params.FeasibilityTol = 1e-5;
 
-results_table = {};
-for i = 1:numel(MAG_ID)
+results_table = cell(numel(MAG_ID), 1);
+parfor i = 1:numel(MAG_ID)
+    problem1 = problem;
+
     num = extractAfter(MAG_ID{i},'BIOMASS_Reaction_');
     dis = ['Calculating the maximum growth rate for model : KG_', num];
     disp(dis)
@@ -110,30 +111,28 @@ for i = 1:numel(MAG_ID)
     f = [zeros(size(model.S,2),1); zeros(size(express_value,2)*2,1)];
     bio = find(ismember(model.rxns,['BIOMASS_Reaction_',num]));
 
+    f(bio) = 1;
+    problem1.obj = f;
+
     % using Gurobi solver
     % maximum growth rate
-    f(bio) = -1;
-    problem.obj = f;
-    solution_max = gurobi(problem, params);
+    problem1.modelsense = 'max';
+    solution_max = gurobi(problem1);
 
-    if contains(solution_max.status, 'INFEASIBLE')
+    if ~isfield(solution_max, 'objval')
         solution_max.objval = 'NA';
-    else
-        solution_max.objval = -solution_max.objval;
     end
 
     % minimum growth rate
-    f(bio) = 1;
-    problem.obj = f;
-    solution_min = gurobi(problem, params);
+    problem1.modelsense = 'min';
+    solution_min = gurobi(problem1);
 
-    if contains(solution_min.status, 'INFEASIBLE')
+    if ~isfield(solution_min, 'objval')
         solution_min.objval = 'NA';
     end
 
     results_t = {['KG_',num], solution_max.objval, solution_min.objval};
-    results_table = [results_table; results_t];
+    results_table{i} = results_t;
 
-    clear f bio num solution_max solution_min results_t
 end
 end
