@@ -145,7 +145,7 @@ expression_3 = expression_value_cell(ids,3);
 expression_4 = expression_value_cell(ids,4);
 expression_5 = expression_value_cell(ids,5);
 
-RxnID = epelem(cor_reaction, 14);
+RxnID = repelem(cor_reaction, 14);
 
 % save the table
 result_table = table(vertcat(RxnID{:}),vertcat(ab_info_1{:}),vertcat(ab_info_2{:}),vertcat(ab_info_3{:}),vertcat(ab_info_4{:}),vertcat(ab_info_5{:}), ...
