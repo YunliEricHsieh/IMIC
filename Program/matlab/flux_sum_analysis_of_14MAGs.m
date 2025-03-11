@@ -34,7 +34,7 @@ load(model_workspace);
 
 lambda = 12;
 
-ncpu = 5;
+ncpu = 20;
 delete(gcp('nocreate'));
 parpool(ncpu);
 
@@ -91,7 +91,7 @@ import_mets = import_mets(~cellfun(@(x) isequal(x, 'MNXM1[e]'), import_mets));
 flux_sum_min = [];
 metabolite_ID = {};
   
-parfor i = 1:numel(timepoint)
+for i = 1:numel(timepoint)
 
     disp('----------------------------------------------------------------------')
     fprintf('\n################# %s\n\n', timepoint{i})
