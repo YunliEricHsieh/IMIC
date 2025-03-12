@@ -5,8 +5,7 @@ methods = {'consensus','carveme','gapseq','kbase'};
 timepoint = {'20d', '40d', '60d', '90d', '180d'};
 
 % set up the trade-off parameter for each methods
-alpha1 = [0.3,0.5,0.5,0.5]; 
-alpha2 = 1; % ab = 1
+alpha = [0.3,0.5,0.5,0.5];
 
 ncpu = 20;
 delete(gcp('nocreate'));
@@ -49,10 +48,10 @@ for i = 1:numel(methods)
             micom_max_growth = -micom_solution.objval;
 
             disp('Calculate Community Growth Rate with coco')
-            com_solution = MICOM(com_model, micom_max_growth, abTable, alpha1(i));
+            com_solution = MICOM(com_model, micom_max_growth, abTable, alpha(i));
 
             % MICOM without abundance info
-            com_solution1 = MICOM_ab1(com_model, alpha2);
+            com_solution1 = MICOM_ab1(com_model, alpha(i));
 
             if isfield(com_solution, 'x') && ~contains(com_solution.status, 'NUMERIC')
                 micom_cell{j} = com_solution.x(contains(com_model.rxns,'BIOMASS_R'));
