@@ -87,7 +87,7 @@ end
 problem.A = [Aeq; A_ineq];
 problem.rhs = [beq; b_ineq];
 problem.quadcon.Qc = sparse(H);
-problem.quadcon.rhs = [micom_obj_value]; % quadratic constraint
+problem.quadcon.rhs = micom_obj_value; % quadratic constraint
 problem.quadcon.q = zeros(1, size(Aeq,2));
 problem.quadcon.sense = '=';
 
