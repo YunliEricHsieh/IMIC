@@ -87,7 +87,7 @@ import_mets = import_mets(~cellfun(@(x) isequal(x, 'MNXM1[e]'), import_mets));
 flux_sum_min = [];
 metabolite_ID = {};
 
-ncpu = 5;
+ncpu = 20;
 delete(gcp('nocreate'));
 parpool(ncpu);
 

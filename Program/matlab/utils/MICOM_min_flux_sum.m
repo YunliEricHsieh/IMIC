@@ -100,26 +100,28 @@ mets_ID = tar_mets;
 min_flux_sum = [];
 
 % minimum flux sum analysis for each metabolite in [e]
-for i = 1:numel(tar_mets)
+parfor i = 1:numel(tar_mets)
 
+    problem1 = problem;
     % define the objective:
     f = zeros(size(Aeq,2),1);
     num = size(model.S,2) + i;
 
+    f(num) = 1;
+    problem1.obj = f;
+
     % using Gurobi solver
     % minimum flux
-    f(num) = 1;
-    problem.obj = f;
-    solution_min = gurobi(problem);
+    problem1.modelsense = 'min';
+    solution_min = gurobi(problem1);
 
     if isfield(solution_min, 'x') && ~contains(solution_min.status, 'NUMERIC')
-        min_flux_sum = [min_flux_sum; solution_min.objval];
+        min_flux_sum(i,1) = solution_min.objval;
     else 
         % the model couldn't find feasible solution 
-        min_flux_sum = [min_flux_sum; nan];
+        min_flux_sum(i,1) = nan;
     end  
- 
-    clear f num solution_min
+
 end
 
 end
