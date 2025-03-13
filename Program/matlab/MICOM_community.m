@@ -43,11 +43,11 @@ for i = 1:numel(methods)
                 abTable.replication_rate = cellfun(@str2double, abTable.replication_rate);
             end
 
-            disp('Calculate Max Growth Rate with coco')
+            disp('Calculate Max Growth Rate with MICOM')
             micom_solution = MICOM_max_growth(com_model, abTable);
             micom_max_growth = -micom_solution.objval;
 
-            disp('Calculate Community Growth Rate with coco')
+            disp('Calculate Community Growth Rate with MICOM')
             com_solution = MICOM(com_model, micom_max_growth, abTable, alpha(i));
 
             % MICOM without abundance info
