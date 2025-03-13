@@ -40,7 +40,7 @@ for k = 1:numel(ratio)
     end
     
     results_table = vertcat(results_cells{:});
-    Species = repmat({'EC';'PP'},288,1);
+    Species = repmat({'PP';'EC'},288,1);
     Time = repmat([repmat({'0h'},6,1);repmat({'4h'},6,1);repmat({'8h'},6,1);repmat({'24h'},6,1)],24,1);
     Lambda = [repmat({'L = 0.1'},24,1);repmat({'L = 0.5'},24,1);repmat({'L = 1'},24,1);repmat({'L = 2'},24,1);
         repmat({'L = 3'},24,1);repmat({'L = 4'},24,1);repmat({'L = 5'},24,1);repmat({'L = 6'},24,1);
