@@ -5,7 +5,7 @@ timepoint = {'0h_1', '0h_2', '0h_3', '4h_1', '4h_2','4h_3','8h_1', '8h_2','8h_3'
 ratio = {'1-1_', '1000-1_', '1-1000_'};
 output = {'equal', 'more', 'less'};
 
-lambda = 6;
+lambda = 9;
 
 null_v = zeros(2,1);
 null_v(:,1) = NaN;
@@ -43,7 +43,7 @@ for i = 1:numel(ratio)
         clear tmp_results
     end
     
-    Species = repmat({'EC';'PP'},12,1);
+    Species = repmat({'PP';'EC'},12,1);
     Time = [repmat({'0h'},6,1);repmat({'4h'},6,1);repmat({'8h'},6,1);repmat({'24h'},6,1)]; 
 
     results_table = table(Species,results,Time);

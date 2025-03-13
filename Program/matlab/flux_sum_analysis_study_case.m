@@ -10,7 +10,7 @@ output = {'equal','more','less'};
 model_workspace = fullfile(modelDir, 'consensus_com.mat');
 load(model_workspace)
 
-lambda = 6;
+lambda = 9;
 
 ncpu = 20;
 delete(gcp('nocreate'));
