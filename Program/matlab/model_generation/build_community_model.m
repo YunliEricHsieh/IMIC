@@ -21,8 +21,17 @@ for k = 1:numel(methods)
     % all_medium = medium; % case 1
     all_medium = extractBefore(all_medium,'[e]');
 
-    % set up an initial model. We choose the first gap-filled model
-    com_model = GF{gf_order(1)};
+    % set up an initial model.
+    % com_model = GF{gf_order(1)}; % in case 1, we choose the first gap-filled model
+
+    % in case 2, we choose the first P. putida model
+    if ismember(GF{1}.id, 'Pputida')
+        com_model = GF{1};
+        gf_order(1) = [];
+    else
+        com_model = GF{2};
+        gf_order(2) = [];
+    end
 
     % find model ID number
     % case 1
@@ -52,7 +61,7 @@ for k = 1:numel(methods)
     clear num
     
     % remove the initial model from gf_order list
-    gf_order(1) = [];
+    % gf_order(1) = []; % case 1
 
     % merge models into a big model (distinguish different organism with different compartment)
     for i = gf_order
