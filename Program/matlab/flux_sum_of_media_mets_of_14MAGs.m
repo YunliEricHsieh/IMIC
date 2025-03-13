@@ -55,7 +55,7 @@ parfor i = 1:numel(timepoint)
     coco_ab1_max_growth = -coco_ab1_solution.objval;
 
     [coco_ab1_flux_sum_value, coco_ab1_mets_ID] = coco_ab1_flux_sum(com_model, coco_ab1_max_growth, ...
-        transcriptTable, abTable, 1, delta, gamma, tar_met_IDs);
+        transcriptTable, abTable, alpha, delta, gamma, tar_met_IDs);
     
     flux_sum_coco_ab1(:, i) = coco_ab1_flux_sum_value;
     metabolite_ID_coco_ab1{i} = coco_ab1_mets_ID;
@@ -71,7 +71,7 @@ parfor i = 1:numel(timepoint)
     metabolite_ID_coco{i} = coco_mets_ID;
 
     % MICOM ab1 flux sum
-    [micom_ab1_flux_sum_value, micom_ab1_mets_ID] = MICOM_ab1_flux_sum(com_model, 1, tar_met_IDs);
+    [micom_ab1_flux_sum_value, micom_ab1_mets_ID] = MICOM_ab1_flux_sum(com_model, alpha, tar_met_IDs);
 
     flux_sum_micom_ab1(:, i) = micom_ab1_flux_sum_value;
     metabolite_ID_micom_ab1{i} = micom_ab1_mets_ID;
