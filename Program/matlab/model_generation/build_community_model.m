@@ -4,20 +4,20 @@ methods = {'carveme','gapseq','kbase','consensus'};
 
 % medium that has been used for gap filling
 % case 1
-mediumFile = 'media/M9-medium-anaerobic.mat';
+% mediumFile = 'media/M9-medium-anaerobic.mat';
 % case 2
-%LB_mediumFile = '~/IMIC/media/LB-medium.mat';
+LB_mediumFile = '~/IMIC/media/LB-medium.mat';
 
 for k = 1:numel(methods)
     methods{k}
     model_workspace = fullfile(modelDir, [methods{k}, '.mat']);
     load(model_workspace)
 
-    load(mediumFile, 'medium')
-%    load(LB_mediumFile, 'LB_medium')
+    % load(mediumFile, 'medium')
+    load(LB_mediumFile, 'LB_medium')
 
-%    all_medium = LB_medium;
-    all_medium = medium;
+    all_medium = LB_medium;
+    % all_medium = medium;
     all_medium = extractBefore(all_medium,'[e]');
 
     % set up an initial model. We choose the first gap-filled model
@@ -25,13 +25,13 @@ for k = 1:numel(methods)
 
     % find model ID number
     % case 1
-    num = extractAfter(com_model.id,'KG_');
+    % num = extractAfter(com_model.id,'KG_');
     % case 2
-    % if contains(com_model.id, 'Ecoli')
-    %     num = '1';
-    % else
-    %     num = '2';
-    % end
+    if contains(com_model.id, 'Ecoli')
+        num = '1';
+    else
+        num = '2';
+    end
 
     % assign reaction IDs with compartment number
     com_model.rxns = replace(com_model.rxns,'_c',['_c',num]);
@@ -61,13 +61,13 @@ for k = 1:numel(methods)
 
         % find model ID number
         % case 1
-        num = extractAfter(model.id,'KG_');
+        % num = extractAfter(model.id,'KG_');
         % case 2
-        % if contains(model.id, 'Ecoli')
-        %     num = '1';
-        % else
-        %     num = '2';
-        % end
+        if contains(model.id, 'Ecoli')
+            num = '1';
+        else
+            num = '2';
+        end
 
         % assign reaction IDs with compartment number
         model.rxns = replace(model.rxns,'_c',['_c',num]);
