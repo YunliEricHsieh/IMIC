@@ -101,9 +101,10 @@ min_flux_sum = [];
 
 % Set up the Gurobi parameters
 params.BarHomogeneous = 1;  % Use the homogeneous barrier algorithm
-params.FeasibilityTol = 1e-9;    % Tighten feasibility tolerance
-params.OptimalityTol = 1e-9;     % Tighten optimality tolerance
-params.IntFeasTol = 1e-9;        % Adjust integrality tolerance
+params.Method = 2; % 2 = Barrier Method
+params.FeasibilityTol = 1e-5;
+params.OptimalityTol = 1e-5;
+params.IterationLimit = 1e6;  % Stop after 1 million iterations
 
 % minimum flux sum analysis for each metabolite in [e]
 parfor i = 1:numel(tar_mets)
