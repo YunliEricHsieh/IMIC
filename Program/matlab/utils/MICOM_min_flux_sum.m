@@ -99,6 +99,12 @@ problem.vtype = repelem('C',size(Aeq,2),1);
 mets_ID = tar_mets;
 min_flux_sum = [];
 
+% Set up the Gurobi parameters
+params.BarHomogeneous = 1;  % Use the homogeneous barrier algorithm
+params.FeasibilityTol = 1e-9;    % Tighten feasibility tolerance
+params.OptimalityTol = 1e-9;     % Tighten optimality tolerance
+params.IntFeasTol = 1e-9;        % Adjust integrality tolerance
+
 % minimum flux sum analysis for each metabolite in [e]
 parfor i = 1:numel(tar_mets)
 
@@ -113,7 +119,7 @@ parfor i = 1:numel(tar_mets)
     % using Gurobi solver
     % minimum flux
     problem1.modelsense = 'min';
-    solution_min = gurobi(problem1);
+    solution_min = gurobi(problem1, params);
 
     if isfield(solution_min, 'x') && ~contains(solution_min.status, 'NUMERIC')
         min_flux_sum(i,1) = solution_min.objval;
