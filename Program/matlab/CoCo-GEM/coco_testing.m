@@ -10,7 +10,7 @@ parpool(ncpu);
 parfevalOnAll(@maxNumCompThreads, 0, 1); 
 
 % testing different parameter value
-alpha = [0.9, 0.5, 0.5, 0.5];
+alpha = [0.3, 0.5, 0.5, 0.5];
 
 delta = [10,20,30,40,50,60,70,80,90,100];
 gamma = [10,20,30,40,50,60,70,80,90,100];
@@ -97,7 +97,7 @@ for m = 1:numel(methods)
     % combine all the output data
     results = [ID_info, num2cell(ab_info), num2cell(rep_info), num2cell(results)];
 
-    alphas = {'0.9','0.5','0.5','0.5'};
+    alphas = {'0.3','0.5','0.5','0.5'};
 
     % Save the final results
     writecell(results, fullfile(tablesDir, 'parameter_test', [methods{m},'_coco_test_alpha_', alphas{m},'.csv']));
