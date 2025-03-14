@@ -9,7 +9,7 @@ delete(gcp('nocreate'));
 parpool(ncpu);
 parfevalOnAll(@maxNumCompThreads, 0, 1); 
 
-alpha = [0.5, 0.7, 0.3, 0.9];
+alpha = [0.3, 0.5, 0.5, 0.5];
 
 delta = [10,20,30,40,50,60,70,80,90,100];
 gamma = [10,20,30,40,50,60,70,80,90,100];
@@ -96,7 +96,7 @@ for l = 1:numel(methods)
     % combine all the output data
     results = [ID_info, num2cell(ab_info), num2cell(rep_info), num2cell(results)];
 
-    alphas = {'0.5','0.7','0.3','0.9'};
+    alphas = {'0.3','0.5','0.5','0.5'};
 
     % Save the final results
     writecell(results, fullfile(tablesDir, 'parameter_test', [methods{l},'_coco_test_with_abundance_1_alpha_', alphas{l},'.csv']));
