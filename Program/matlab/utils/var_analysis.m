@@ -99,6 +99,8 @@ problem.ub = ub;
 problem.sense = [repelem('=',size(beq,1),1); repelem('<',size(b_ineq,1),1)];
 problem.vtype = repelem('C',size(Aeq,2),1);
 
+gurobi_params.FeasibilityTol = 1e-9;
+
 results_table = cell(numel(MAG_ID), 1);
 parfor i = 1:numel(MAG_ID)
     problem1 = problem;
