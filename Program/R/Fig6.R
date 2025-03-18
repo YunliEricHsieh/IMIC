@@ -1,194 +1,106 @@
-topDir <- "~/IMIC/study_case/table/flux_sum_analysis/"
-e_data <- read.table(paste0(topDir, 'equal_flux_sum.csv'),
-                     header = T, sep = ',')
-l_data <- read.table(paste0(topDir, 'less_flux_sum.csv'),
-                     header = T, sep = ',')
-m_data <- read.table(paste0(topDir, 'more_flux_sum.csv'),
-                     header = T, sep = ',')
+topDir <- "~/IMIC/table/flux_sum_analysis/"
+IMIC <- read.table(paste0(topDir, '14_MAG_flux_sum.csv'),
+                   header = T, sep = ',')
+MICOM <- read.table(paste0(topDir, 'MICOM_flux_sum.csv'),
+                    header = T, sep = ',')
 
 # Define the threshold
 threshold <- 10^-5
 
 # Apply the condition to numeric columns only
-numeric_e <- sapply(e_data, is.numeric)
-numeric_l <- sapply(l_data, is.numeric) 
-numeric_m <- sapply(m_data, is.numeric) 
+numeric_I <- sapply(IMIC, is.numeric)
+numeric_M <- sapply(MICOM, is.numeric) 
 
-e_data[, numeric_e] <- lapply(e_data[, numeric_e], function(x) {
-  x[x < threshold] <- 0  # Replace values less than the threshold with zero
+# Replace values less than the threshold with zero
+IMIC[, numeric_I] <- lapply(IMIC[, numeric_I], function(x) {
+  x[x < threshold] <- 0  
   return(x)
 })
 
-l_data[, numeric_l] <- lapply(l_data[, numeric_l], function(x) {
-  x[x < threshold] <- 0  # Replace values less than the threshold with zero
+MICOM[, numeric_M] <- lapply(MICOM[, numeric_M], function(x) {
+  x[x < threshold] <- 0 
   return(x)
 })
 
-m_data[, numeric_m] <- lapply(m_data[, numeric_m], function(x) {
-  x[x < threshold] <- 0  # Replace values less than the threshold with zero
-  return(x)
-})
 
-new_e_data <- e_data[,-1]
-new_l_data <- l_data[,-1]
-new_m_data <- m_data[,-1]
+colnames(IMIC) <- c('ID','20d','40d','60d','90d','180d') 
+colnames(MICOM) <- c('ID','20d','40d','60d','90d','180d') 
 
-# calculate the mean value for the replicate sample at each time point
-row_means_e<- t(apply(new_e_data, 1, function(row) {
-  # Reshape the row to have 3 columns
-  row_matrix <- matrix(row, ncol = 3, byrow = TRUE)
-  # Calculate the mean of each row in the reshaped matrix
-  row_means_e <- apply(row_matrix, 1, mean)
-  return(row_means_e)
-}))
+met_number <- data.frame()
+met_number <- data.frame(c(sum(IMIC$'20d' > 0,na.rm = T),sum(IMIC$'40d' > 0,na.rm = T),
+                           sum(IMIC$'60d' > 0,na.rm = T),sum(IMIC$'90d' > 0,na.rm = T),
+                           sum(IMIC$'180d' > 0,na.rm = T),sum(MICOM$'20d' > 0,na.rm = T),
+                           sum(MICOM$'40d' > 0,na.rm = T),sum(MICOM$'60d' > 0,na.rm = T),
+                           sum(MICOM$'90d' > 0,na.rm = T),sum(MICOM$'180d' > 0,na.rm = T)))
 
-row_means_l <- t(apply(new_l_data, 1, function(row) {
-  # Reshape the row to have 3 columns
-  row_matrix <- matrix(row, ncol = 3, byrow = TRUE)
-  # Calculate the mean of each row in the reshaped matrix
-  row_means_l <- apply(row_matrix, 1, mean)
-  return(row_means_l)
-}))
+colnames(met_number) <- 'Number'
 
-row_means_m <- t(apply(new_m_data, 1, function(row) {
-  # Reshape the row to have 3 columns
-  row_matrix <- matrix(row, ncol = 3, byrow = TRUE)
-  # Calculate the mean of each row in the reshaped matrix
-  row_means_m <- apply(row_matrix, 1, mean)
-  return(row_means_m)
-}))
+met_number$Methods <- c(rep('IMIC',5),rep('MICOM',5))
+met_number$Timepoint <- as.factor(rep(c('20d','40d','60d','90d','180d'),2))
 
-row_means_e <- as.data.frame(row_means_e)
-row_means_l <- as.data.frame(row_means_l)
-row_means_m <- as.data.frame(row_means_m)
-
-metabolite_id <- data.frame(e_data[,1])
-
-met_e <- data.frame(c(metabolite_id, row_means_e))
-met_l <- data.frame(c(metabolite_id, row_means_l))
-met_m <- data.frame(c(metabolite_id, row_means_m))
-
-colnames(met_e) <- c('ID','h0','h4','h8','h24') 
-colnames(met_l) <- c('ID','h0','h4','h8','h24') 
-colnames(met_m) <- c('ID','h0','h4','h8','h24') 
-
-# filter out the metabolites haveing 0 flux sum values
-#met_e <- met_e[which(rowSums(met_e[,-1]) != 0),]
-#met_l <- met_l[which(rowSums(met_l[,-1]) != 0),]
-#met_m <- met_m[which(rowSums(met_m[,-1]) != 0),]
-
-# remove the proton
-met_e <- met_e[-which(met_e$ID == 'MNXM1[e]'),]
-met_l <- met_l[-which(met_l$ID == 'MNXM1[e]'),]
-met_m <- met_m[-which(met_m$ID == 'MNXM1[e]'),]
-
-# find the top 20 import metabolites over all time points
-top_20_e <- met_e$ID[order(rowSums(met_e[,-1]), decreasing = T)[1:20]]
-top_20_l <- met_l$ID[order(rowSums(met_l[,-1]), decreasing = T)[1:20]]
-top_20_m <- met_m$ID[order(rowSums(met_m[,-1]), decreasing = T)[1:20]]
-
-top_mets <- as.data.frame(unique(c(top_20_e,top_20_l,top_20_m)))
-colnames(top_mets) <- 'ID'
-
-#write.csv(top_mets, '~/Desktop/PhD/Project_2/study_case/table/top_import_mets.csv')
-
-topDir <- "~/IMIC/study_case/table/"
-
-top_mets <- m_data <- read.table(paste0(topDir, 'top_import_mets.csv'),
-                                 header = T, sep = ',')
-
-# heatmap
-top_mets_flux <- data.frame()
-
-# 0h
-for (i in 1:nrow(top_mets)){
-  top_mets_flux[i,1] <- met_e$h0[which(met_e$ID == top_mets[i,1])]
-}
-
-num = nrow(top_mets_flux)
-for (i in 1:nrow(top_mets)){
-  top_mets_flux[i+num,1] <- met_l$h0[which(met_l$ID == top_mets[i,1])]
-}
-
-num = nrow(top_mets_flux)
-for (i in 1:nrow(top_mets)){
-  top_mets_flux[i+num,1] <- met_m$h0[which(met_m$ID == top_mets[i,1])]
-}
-
-# 4h
-num = nrow(top_mets_flux)
-for (i in 1:nrow(top_mets)){
-  top_mets_flux[i+num,1] <- met_e$h4[which(met_e$ID == top_mets[i,1])]
-}
-
-num = nrow(top_mets_flux)
-for (i in 1:nrow(top_mets)){
-  top_mets_flux[i+num,1] <- met_l$h4[which(met_l$ID == top_mets[i,1])]
-}
-
-num = nrow(top_mets_flux)
-for (i in 1:nrow(top_mets)){
-  top_mets_flux[i+num,1] <- met_m$h4[which(met_m$ID == top_mets[i,1])]
-}
-
-# 8h
-num = nrow(top_mets_flux)
-for (i in 1:nrow(top_mets)){
-  top_mets_flux[i+num,1] <- met_e$h8[which(met_e$ID == top_mets[i,1])]
-}
-
-num = nrow(top_mets_flux)
-for (i in 1:nrow(top_mets)){
-  top_mets_flux[i+num,1] <- met_l$h8[which(met_l$ID == top_mets[i,1])]
-}
-
-num = nrow(top_mets_flux)
-for (i in 1:nrow(top_mets)){
-  top_mets_flux[i+num,1] <- met_m$h8[which(met_m$ID == top_mets[i,1])]
-}
-
-# 24h
-num = nrow(top_mets_flux)
-for (i in 1:nrow(top_mets)){
-  top_mets_flux[i+num,1] <- met_e$h24[which(met_e$ID == top_mets[i,1])]
-}
-
-num = nrow(top_mets_flux)
-for (i in 1:nrow(top_mets)){
-  top_mets_flux[i+num,1] <- met_l$h24[which(met_l$ID == top_mets[i,1])]
-}
-
-num = nrow(top_mets_flux)
-for (i in 1:nrow(top_mets)){
-  top_mets_flux[i+num,1] <- met_m$h24[which(met_m$ID == top_mets[i,1])]
-}
-
-top_mets_flux$ID <- as.factor(rep(top_mets$Name,12))
-colnames(top_mets_flux) <- c('Flux_sum','ID')
-top_mets_flux$Ratio <- rep(c(rep('1:1',nrow(top_mets)),rep('1:1000',nrow(top_mets)),rep('1000:1',nrow(top_mets))),4)
-top_mets_flux$Time <- as.factor(c(rep(rep('0h',nrow(top_mets)),3), rep(rep('4h',nrow(top_mets)),3), rep(rep('8h',nrow(top_mets)),3),
-                                  rep(rep('24h',nrow(top_mets)),3)))
-
-top_mets_flux$Flux_sum <- log10(top_mets_flux$Flux_sum)
-
-library(viridis)
 library(ggplot2)
 library(ggpubr)
 library(forcats)
 
-ggplot(top_mets_flux, aes(Ratio, fct_inorder(ID), fill= Flux_sum)) + 
-  geom_tile() +
-  scale_fill_viridis(discrete=FALSE) +
-  facet_grid(cols = vars(fct_inorder(top_mets_flux$Time)))+
-  labs(fill = 'log10(flux sum)')+
-  font("x.text", size = 15)+
-  font("y.text", size = 15)+
-  font('legend.text', size = 12)+
-  font('legend.title', size = 15)+
-  theme(axis.title = element_blank(),
-        strip.text = element_text(size = 15))
+ggplot(met_number, aes(x = fct_inorder(Timepoint), y = Number, fill = Methods))+
+  geom_bar(stat="identity",position='dodge')+
+  geom_text(aes(label=Number), vjust=-0.3, size=4, position = position_dodge(0.9))+
+  scale_fill_manual(values=c("#E69F00", "#56B4E9"))+
+  theme_linedraw()+
+  labs(y = 'Imported metabolites')+
+  font("x.text", size = 12)+
+  font("y.text", size = 12)+
+  font("y.title", size = 14)+
+  font("legend.text", size = 12)+
+  theme(axis.title.x = element_blank(),
+        legend.title = element_blank(),
+        panel.grid = element_blank(),
+        legend.position = 'top')
 
-ggsave(filename = "~/IMIC/Figure/Fig 6.svg",
-       width = 30, height = 25,units = "cm")
+ggsave(filename = "~/IMIC/Figure/Fig 6-1.svg",
+       width = 12, height = 10,units = "cm")
 
+# define the different type of imported metaoblites
+# find the time independent imported metabolite
+imic_time_indep <- as.data.frame(IMIC$ID[which(IMIC$'20d'>0 & IMIC$'40d'>0 & IMIC$'60d'>0 &IMIC$'90d'>0 & IMIC$'180d'>0)])
+colnames(imic_time_indep) = 'ID'
+micom_time_indep <- as.data.frame(MICOM$ID[which(MICOM$'20d'>0 & MICOM$'40d'>0 & MICOM$'60d'>0 &MICOM$'90d'>0 & MICOM$'180d'>0)])
+colnames(micom_time_indep) = 'ID'
 
+# find all of the imported metabolite
+imic_import <- as.data.frame(IMIC$ID[rowSums(IMIC[, -1], na.rm = T) != 0])
+colnames(imic_import) = 'ID'
+micom_import <- as.data.frame(MICOM$ID[rowSums(MICOM[, -1], na.rm = T) != 0])
+colnames(micom_import) = 'ID'
+
+# find the time dependent imported metabolite
+imic_time_dep <- as.data.frame(imic_import$ID[!(imic_import$ID %in% imic_time_indep$ID)])
+colnames(imic_time_dep) = 'ID'
+micom_time_dep <- as.data.frame(micom_import$ID[!(micom_import$ID %in% micom_time_indep$ID)])
+colnames(micom_time_dep) = 'ID'
+
+# create a table for upset plot
+met_table = as.data.frame(IMIC$ID)
+colnames(met_table) = 'ID'
+#met_table$'IMIC all imported mets' <- as.integer(as.logical(IMIC$ID %in% imic_import$ID))
+met_table$'IMIC time independent' <- as.integer(as.logical(IMIC$ID %in% imic_time_indep$ID))
+met_table$'IMIC time dependent' <- as.integer(as.logical(IMIC$ID %in% imic_time_dep$ID))
+#met_table$'MICOM all imported mets' <- as.integer(as.logical(IMIC$ID %in% micom_import$ID))
+met_table$'MICOM time independent' <- as.integer(as.logical(IMIC$ID %in% micom_time_indep$ID))
+met_table$'MICOM time dependent' <- as.integer(as.logical(IMIC$ID %in% micom_time_dep$ID))
+
+# show the metabolites which are time dependent in IMIC but time independent in MICOM
+met_table$ID[which(met_table$`IMIC time dependent` == 1 & met_table$`MICOM time independent` == 1)]
+# show the metabolites which are time independent in IMIC but time dependent in MICOM
+met_table$ID[which(met_table$`IMIC time independent` == 1 & met_table$`MICOM time dependent` == 1)]
+
+library(UpSetR)
+library(svglite)
+
+svglite("~/IMIC/Figure/Fig 6-2.svg", width = 7, height = 5)
+
+upset(met_table, nsets = 6, point.size = 3.5, line.size = 2, 
+      mainbar.y.label = "Intersection size", sets.x.label = "Metabolites", 
+      order.by = "freq", text.scale = c(2,2,2,2,2,2)) 
+
+dev.off()

@@ -101,11 +101,11 @@ a <- ggscatter(data = EC, x =  'quantity', y = 'Mean',
   font("title", size = 15, face = 'bold')+
   font("x.text", size = 14)+
   font("y.text", size = 14)+
-  stat_cor(method = "spearman", label.x = 6, label.y = 11, size= 6)+
+  stat_cor(method = "spearman", label.x = 5.5, label.y = 5.5, size= 6, cor.coef.name = 'rho')+
   theme(panel.border = element_rect(color = 'black', size = 1, fill = NA))+
   geom_errorbar(aes(ymin = Mean-SD_1, ymax= Mean+SD_1), color = '#F8766D', width=.1)+
   geom_errorbar(aes(xmin = quantity-SD, xmax= quantity+SD), color = '#F8766D', width=.1)+
-  annotate('text', x = 5.5, y = 12, label = 'E. coli', size = 7, fontface = 'italic')
+  annotate('text', x = 6, y = 6, label = 'E. coli', size = 7, fontface = 'italic')
 
 a
 
@@ -122,11 +122,11 @@ b<- ggscatter(data = PP, x =  'quantity', y = 'Mean',
   font("title", size = 15, face = 'bold')+
   font("x.text", size = 14)+
   font("y.text", size = 14)+
-  stat_cor(method = "spearman", label.x = 6, label.y = 18, size= 6)+
+  stat_cor(method = "spearman", label.x = 5.8, label.y = 9, size= 6, cor.coef.name = 'rho')+
   theme(panel.border = element_rect(color = 'black', size = 1, fill = NA))+
   geom_errorbar(aes(ymin = Mean-SD_1, ymax= Mean+SD_1), color = '#00BFC4', width=.1)+
   geom_errorbar(aes(xmin = quantity-SD, xmax= quantity+SD), color = '#00BFC4', width=.1)+
-  annotate('text', x = 5.8, y = 22, label = 'P. putida', size = 7, fontface = 'italic')
+  annotate('text', x = 6.5, y = 10, label = 'P. putida', size = 7, fontface = 'italic')
 
 b
 

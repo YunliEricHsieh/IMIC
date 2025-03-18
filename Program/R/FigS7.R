@@ -45,12 +45,11 @@ process_flux_data <- function(IMIC, measured_mets) {
   amino_acid <- aggregate(. ~ `Amino acids`, data = amino_acid, sum)
   
   # Reshape the data for plotting
-  sugars_melted <- melt(sugars, id.vars = c('Sugars and organic acids'), variable.name = 'Time', value.name = 'Flux')
-  amino_melted <- melt(amino_acid, id.vars = c('Amino acids'), variable.name = 'Time', value.name = 'Flux')
+  sugars_melted <- reshape2::melt(sugars, id.vars = c('Sugars and organic acids'), variable.name = 'Time', value.name = 'Flux')
+  amino_melted <- reshape2::melt(amino_acid, id.vars = c('Amino acids'), variable.name = 'Time', value.name = 'Flux')
   
   return(list(sugars_melted = sugars_melted, amino_melted = amino_melted))
 }
-
 
 # Call the function
 # IMIC
@@ -270,3 +269,61 @@ combined_plot <- (sugur_plot / amino_plot) + plot_layout(ncol = 1)
 
 # Save the combined plot as an SVG file
 ggsave(filename = "~/IMIC/Figure/Fig S7.svg", plot = combined_plot, width = 35, height = 25, units = "cm")
+
+# calculate the correlation between predicted flux and measured concentration
+han_data <- read.table(paste0(topDir, 'Measured amino acids from Han et al 2020.csv'), header = T, sep = ',')
+
+# Create the data frame with the first column filled
+hab_data1 <- data.frame(`Amino acids` = han_data$Amino.acid)
+colnames(hab_data1) <- 'Amino acids'
+
+# List of time points and corresponding columns in `han_data`
+time_points <- c("20d", "40d", "60d", "90d", "180d")
+han_columns <- list(
+  c('G1.20d', 'G2.20d', 'G3.20d'),
+  c('G1.40d', 'G2.40d', 'G3.40d'),
+  c('G1.70d', 'G2.70d', 'G3.70d'),
+  c('G1.90d', 'G2.90d', 'G3.90d'),
+  c('G1.180d', 'G2.180d', 'G3.180d')
+)
+
+# Compute row means dynamically
+for (i in seq_along(time_points)) {
+  hab_data1[[time_points[i]]] <- rowMeans(han_data[, han_columns[[i]]], na.rm = TRUE)
+}
+
+# Reshape to long format
+hab_data1 <- reshape2::melt(hab_data1, id.vars = 'Amino acids', variable.name = 'Time', value.name = 'Concentration')
+
+# Merge `hab_data1` with multiple amino acid datasets in a loop
+amino_datasets <- list(IMIC_amino, coco_amino, micom_amino, coco_ab1_amino, micom_ab1_amino)
+amino_names <- c("IMIC", "CoCo", "MICOM", "CoCo_ab1", "MICOM_ab1")
+
+merged_amino <- lapply(amino_datasets, function(df) merge(df, hab_data1, by = c("Amino acids", "Time"), all = FALSE))
+names(merged_amino) <- amino_names
+
+# Function to perform correlation analysis
+corr_analysis <- function(aa_data) {
+  aa_data %>%
+    group_by(`Amino acids`) %>%
+    summarise(
+      rho = cor(round(Flux, 5), round(Concentration, 5), method = "pearson"),
+      p_value = round(cor.test(round(Flux, 5), round(Concentration, 5), method = "pearson", exact = FALSE)$p.value, 4)
+    ) %>%
+    ungroup()
+}
+
+# Apply correlation analysis to each merged dataset
+cor_results_list <- lapply(merged_amino, corr_analysis)
+
+# Combine all results into a single data frame
+cor_results <- do.call(cbind, lapply(cor_results_list, function(df) select(df, rho, p_value)))
+colnames(cor_results) <- paste0(rep(amino_names, each = 2), c("_r", "_p"))
+
+# Set row names
+rownames(cor_results) <- cor_results_list[[1]]$`Amino acids`
+
+# Save the correlation results to a CSV file
+write.csv(cor_results, file = "~/IMIC/table/flux_sum_analysis/correlation_results.csv")
+
+
