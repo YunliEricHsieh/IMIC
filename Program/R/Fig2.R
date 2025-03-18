@@ -4,22 +4,15 @@ micom <- read.table(paste0(topDir, 'consensus_MICOM_results_table.csv'),
 
 library(ggplot2)
 library(ggpubr)
-
+micom <- micom %>% mutate_if(is.numeric, ~round(., 6))
 ab1 <- ggscatter(micom, x =  'MAG_ab', y = 'MICOM_ab1',
                  xlab = 'Measured relative abundance (%)',
-                 ylab = '',
-                 add = "reg.line",                                 # Add regression line
-                 conf.int = TRUE,                                  # Add confidence interval
-                 add.params = list(color = "blue",
-                                   fill = "lightgray"))+
-  ylim(0,150)+
+                 ylab = '')+
   labs(title = 'b.')+
   font("title", size = 15, face = 'bold')+
   font("xlab", size = 15)+
   font("x.text", size = 13)+
-  stat_cor(method = "spearman", label.x = 5, label.y = 140, size= 5.5, cor.coef.name = 'rho')+
-  theme(panel.border = element_rect(color = 'black', size = 1, fill = NA),
-        axis.text.y = element_blank())
+  theme(panel.border = element_rect(color = 'black', size = 1, fill = NA))
 
 ab1
 
@@ -51,9 +44,12 @@ topDir <- "~/IMIC/table/parameter_test/"
 ##### coco test #####
 data <- read.table(paste0(topDir, 'consensus_coco_test_alpha_0.3.csv'),
                    header = T, sep = ',')
+data <- data %>% mutate_if(is.numeric, ~round(., 6))
+
 ##### coco test with abundance = 1 results #####
-data_ab <- read.table(paste0(topDir, 'consensus_coco_test_with_abundance_1_alpha_1.csv'),
+data_ab <- read.table(paste0(topDir, 'consensus_coco_test_with_abundance_1_alpha_0.3.csv'),
                       header = T, sep = ',')
+data_ab <- data_ab %>% mutate_if(is.numeric, ~round(., 6))
 
 cor_result <- data.frame()
 
@@ -180,6 +176,7 @@ gamma_p
 ############################################################################
 consensus <- read.table(paste0(topDir, 'consensus_lambda_test_results.csv'),
                         header = T, sep = ',')
+consensus <- consensus %>% mutate_if(is.numeric, ~round(., 6))
 
 cor_result <- data.frame()
 

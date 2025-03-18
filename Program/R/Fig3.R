@@ -45,7 +45,7 @@ kbase <- read.table(paste0(testtopDir, 'kbase_lambda_test_results.csv'),
 cor_result <- data.frame()
 
 for (i in 4:length(consensus)){
-  cor_r <- cor.test(consensus[,3],consensus[,i], method = 'spearman',exact = F)
+  cor_r <- cor.test(consensus[,2],consensus[,i], method = 'spearman',exact = F)
   cor_result[i-3,1] <- cor_r$estimate
   cor_result[i-3,2] <- cor_r$p.value
 }
@@ -54,7 +54,7 @@ num <- nrow(cor_result)
 
 
 for (i in 4:length(carveme)){
-  cor_r <- cor.test(carveme[,3],carveme[,i], method = 'spearman',exact = F)
+  cor_r <- cor.test(carveme[,2],carveme[,i], method = 'spearman',exact = F)
   cor_result[num+i-3,1] <- cor_r$estimate
   cor_result[num+i-3,2] <- cor_r$p.value
 }
@@ -63,7 +63,7 @@ num <- nrow(cor_result)
 
 
 for (i in 4:length(gapseq)){
-  cor_r <- cor.test(gapseq[,3],gapseq[,i], method = 'spearman',exact = F)
+  cor_r <- cor.test(gapseq[,2],gapseq[,i], method = 'spearman',exact = F)
   cor_result[num+i-3,1] <- cor_r$estimate
   cor_result[num+i-3,2] <- cor_r$p.value
 }
@@ -72,7 +72,7 @@ num <- nrow(cor_result)
 
 
 for (i in 4:length(kbase)){
-  cor_r <- cor.test(kbase[,3],kbase[,i], method = 'spearman',exact = F)
+  cor_r <- cor.test(kbase[,2],kbase[,i], method = 'spearman',exact = F)
   cor_result[num+i-3,1] <- cor_r$estimate
   cor_result[num+i-3,2] <- cor_r$p.value
 }
@@ -131,7 +131,7 @@ l_data <- read.table(paste0(topDir, 'less_lambda_testing.csv'),
                      header = T, sep = ',')
 m_data <- read.table(paste0(topDir, 'more_lambda_testing.csv'),
                      header = T, sep = ',')
-qPCR <- read.table(paste0(topDir, 'qPCR-data.csv'),
+qPCR <- read.table('~/IMIC/study_case/table/qPCR-data.csv',
                    header = T, sep = ',')
 
 ##### Organize data from qPCR data #####
@@ -306,8 +306,8 @@ b <- ggplot()+
   scale_y_continuous(
     sec.axis = sec_axis(~rescale(. , from = primary_range_1, to = secondary_range_1), name = "Spearman correlation coefficient")
   ) +
-  # Adding a vertical line at x = 12
-  geom_vline(xintercept = 6, color = "darkred", size = 1, linetype = "solid") +
+  # Adding a vertical line at x = 9
+  geom_vline(xintercept = 9, color = "darkred", size = 1, linetype = "solid") +
   labs(title = 'b.')+
   font("ylab", size = 16)+
   font("xlab", size = 16)+

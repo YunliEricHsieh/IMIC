@@ -1,101 +1,94 @@
-topDir <- "~/IMIC/table/flux_sum_analysis/"
-IMIC <- read.table(paste0(topDir, '14_MAG_flux_sum.csv'),
+topDir <- "~/IMIC/table/key_reaction/"
+
+data <- read.table(paste0(topDir, 'flux_value_of_key_rxns.csv'),
                    header = T, sep = ',')
-MICOM <- read.table(paste0(topDir, 'MICOM_flux_sum.csv'),
-                    header = T, sep = ',')
 
-# Define the threshold
-threshold <- 10^-5
+rxn.list <- unique(data$RxnID)
 
-# Apply the condition to numeric columns only
-numeric_I <- sapply(IMIC, is.numeric)
-numeric_M <- sapply(MICOM, is.numeric) 
+new.data <- data.frame()
+x <- 0
 
-# Replace values less than the threshold with zero
-IMIC[, numeric_I] <- lapply(IMIC[, numeric_I], function(x) {
-  x[x < threshold] <- 0  
-  return(x)
-})
+for (i in 1:length(rxn.list)){
+  
+  tmp.data <- data[which(data$RxnID == rxn.list[i]),]
+  y <- 2
+  z <- 7
+  h <- 12
+  
+  for (j in 1:5){
+    
+    ab_cor_test <- cor.test(tmp.data[,y], tmp.data[,z], method = "spearman",exact=FALSE)
+    exp_cor_test <- cor.test(tmp.data[,y], tmp.data[,h], method = "spearman",exact=FALSE)
+    
+    # reaction ID
+    new.data[x+j,1] <- rxn.list[i]
+    
+    # correlation coeficient and p-value
+    new.data[x+j,2] <- ab_cor_test$estimate
+    new.data[x+j,3] <- ab_cor_test$p.value
+    
+    # correlation coeficient and p-value
+    new.data[x+j,4] <- exp_cor_test$estimate
+    new.data[x+j,5] <- exp_cor_test$p.value
+    
+    y <- y+1
+    z <- z+1
+    h <- h+1
+    
+  }
+  x = x+5
+}
 
-MICOM[, numeric_M] <- lapply(MICOM[, numeric_M], function(x) {
-  x[x < threshold] <- 0 
-  return(x)
-})
+# correct p-value for multiple comparisons
+new.data$V3 <- p.adjust(new.data$V3, method="BH")
+new.data$V5 <- p.adjust(new.data$V5, method="BH")
 
+# change the column name
+colnames(new.data) <- c('RxnID', 'ab_cor', 'ab_adj_p', 'exp_cor', 'exp_adj_p')
 
-colnames(IMIC) <- c('ID','20d','40d','60d','90d','180d') 
-colnames(MICOM) <- c('ID','20d','40d','60d','90d','180d') 
-
-met_number <- data.frame()
-met_number <- data.frame(c(sum(IMIC$'20d' > 0,na.rm = T),sum(IMIC$'40d' > 0,na.rm = T),
-                           sum(IMIC$'60d' > 0,na.rm = T),sum(IMIC$'90d' > 0,na.rm = T),
-                           sum(IMIC$'180d' > 0,na.rm = T),sum(MICOM$'20d' > 0,na.rm = T),
-                           sum(MICOM$'40d' > 0,na.rm = T),sum(MICOM$'60d' > 0,na.rm = T),
-                           sum(MICOM$'90d' > 0,na.rm = T),sum(MICOM$'180d' > 0,na.rm = T)))
-
-colnames(met_number) <- 'Number'
-
-met_number$Methods <- c(rep('IMIC',5),rep('MICOM',5))
-met_number$Timepoint <- as.factor(rep(c('20d','40d','60d','90d','180d'),2))
+# add time point information
+new.data$time <- as.factor(rep(c('20d', '40d', '60d', '90d', '180d'), 11))
 
 library(ggplot2)
 library(ggpubr)
 library(forcats)
 
-ggplot(met_number, aes(x = fct_inorder(Timepoint), y = Number, fill = Methods))+
-  geom_bar(stat="identity",position='dodge')+
-  geom_text(aes(label=Number), vjust=-0.3, size=4, position = position_dodge(0.9))+
-  scale_fill_manual(values=c("#E69F00", "#56B4E9"))+
+a <- ggplot(new.data, aes(x = RxnID, y = ab_cor)) + 
+  geom_boxplot(aes(group = RxnID, fill = fct_inorder(time)), alpha = 0.5, outlier.shape = NA) +
+  geom_point(aes(color = fct_inorder(time)), position = position_jitter(width = 0.2), alpha = 0.6, size = 3) +
+  labs(x = '', y = 'Spearman correlation coefficient') +
+  scale_fill_brewer(palette = "Set1", name = "Time") +  # Ensure 'fill' uses time
+  scale_color_brewer(palette = "Set1", name = "Time") +  # Ensure 'color' uses time
   theme_linedraw()+
-  labs(y = 'Number of imported metabolite')+
-  font("x.text", size = 12)+
-  font("y.text", size = 12)+
-  font("y.title", size = 14)+
-  font("legend.text", size = 12)+
-  theme(axis.title.x = element_blank(),
-        legend.title = element_blank(),
-        panel.grid = element_blank(),
-        legend.position = 'top')
+  ylim(0,1)+
+  labs(title = 'a.')+
+  font("title", size = 15, face = 'bold')+
+  theme(axis.text.x = element_text(angle = 90, vjust = 1, hjust = 1, size = 13),
+        axis.text.y = element_text(size = 15),
+        axis.title.y = element_text(size = 15),
+        legend.position = "none")
+a
 
-# define the different type of imported metaoblites
-# find the time independent imported metabolite
-imic_time_indep <- as.data.frame(IMIC$ID[which(IMIC$'20d'>0 & IMIC$'40d'>0 & IMIC$'60d'>0 &IMIC$'90d'>0 & IMIC$'180d'>0)])
-colnames(imic_time_indep) = 'ID'
-micom_time_indep <- as.data.frame(MICOM$ID[which(MICOM$'20d'>0 & MICOM$'40d'>0 & MICOM$'60d'>0 &MICOM$'90d'>0 & MICOM$'180d'>0)])
-colnames(micom_time_indep) = 'ID'
+b <- ggplot(new.data, aes(x = RxnID, y = exp_cor)) + 
+  geom_boxplot(aes(group = RxnID, fill = fct_inorder(time)), alpha = 0.5, outlier.shape = NA) +
+  geom_point(aes(color = fct_inorder(time)), position = position_jitter(width = 0.2), alpha = 0.6, size = 3) +
+  labs(x = '', y = '') +
+  scale_fill_brewer(palette = "Set1", name = "Time") +  # Ensure 'fill' uses time
+  scale_color_brewer(palette = "Set1", name = "Time") +  # Ensure 'color' uses time
+  theme_linedraw()+
+  ylim(0,1)+
+  labs(title = 'b.')+
+  font("title", size = 15, face = 'bold')+
+  font("legend.text", size = 13)+
+  theme(axis.text.x = element_text(angle = 90, vjust = 1, hjust = 1, size = 13),
+        axis.text.y = element_blank(),
+        axis.title.y = element_text(size = 15),
+        legend.position = "right",
+        legend.title = element_blank())
+b
 
-# find all of the imported metabolite
-imic_import <- as.data.frame(IMIC$ID[rowSums(IMIC[, -1], na.rm = T) != 0])
-colnames(imic_import) = 'ID'
-micom_import <- as.data.frame(MICOM$ID[rowSums(MICOM[, -1], na.rm = T) != 0])
-colnames(micom_import) = 'ID'
+library(patchwork)
+a+b+plot_layout(nrow = 1)
 
-# find the time dependent imported metabolite
-imic_time_dep <- as.data.frame(imic_import$ID[!(imic_import$ID %in% imic_time_indep$ID)])
-colnames(imic_time_dep) = 'ID'
-micom_time_dep <- as.data.frame(micom_import$ID[!(micom_import$ID %in% micom_time_indep$ID)])
-colnames(micom_time_dep) = 'ID'
-
-# create a table for upset plot
-met_table = as.data.frame(IMIC$ID)
-colnames(met_table) = 'ID'
-#met_table$'IMIC all imported mets' <- as.integer(as.logical(IMIC$ID %in% imic_import$ID))
-met_table$'IMIC time independent' <- as.integer(as.logical(IMIC$ID %in% imic_time_indep$ID))
-met_table$'IMIC time dependent' <- as.integer(as.logical(IMIC$ID %in% imic_time_dep$ID))
-#met_table$'MICOM all imported mets' <- as.integer(as.logical(IMIC$ID %in% micom_import$ID))
-met_table$'MICOM time independent' <- as.integer(as.logical(IMIC$ID %in% micom_time_indep$ID))
-met_table$'MICOM time dependent' <- as.integer(as.logical(IMIC$ID %in% micom_time_dep$ID))
-
-# show the metabolites which are time dependent in IMIC but time independent in MICOM
-met_table$ID[which(met_table$`IMIC time dependent` == 1 & met_table$`MICOM time independent` == 1)]
-# show the metabolites which are time independent in IMIC but time dependent in MICOM
-met_table$ID[which(met_table$`IMIC time independent` == 1 & met_table$`MICOM time dependent` == 1)]
-
-library(UpSetR)
-library(ggplotify)
-
-fig <- as.ggplot(
-  upset(met_table, nsets = 6, point.size = 3.5, line.size = 2, 
-        mainbar.y.label = "Intersection size", sets.x.label = "Number of metabolite", 
-        order.by = "freq", text.scale = c(2,2,2,2,2,2)) 
-)
+ggsave(filename = "~/IMIC/Figure/Fig 5.svg",
+       width = 25, height = 15,units = "cm")
