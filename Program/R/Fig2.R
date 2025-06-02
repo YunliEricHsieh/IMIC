@@ -4,15 +4,24 @@ micom <- read.table(paste0(topDir, 'consensus_MICOM_results_table.csv'),
 
 library(ggplot2)
 library(ggpubr)
+library(dplyr)
+library(scales)
+
 micom <- micom %>% mutate_if(is.numeric, ~round(., 6))
 ab1 <- ggscatter(micom, x =  'MAG_ab', y = 'MICOM_ab1',
                  xlab = 'Measured relative abundance (%)',
-                 ylab = '')+
-  labs(title = 'b.')+
-  font("title", size = 15, face = 'bold')+
+                 ylab = 'Predicted growth rate [1/h]')+
+  labs(title = 'b')+
+  font("ylab", size = 15)+
   font("xlab", size = 15)+
+  font("title", size = 15, face = 'bold')+
   font("x.text", size = 13)+
-  theme(panel.border = element_rect(color = 'black', size = 1, fill = NA))
+  font("y.text", size = 13)+
+  theme(panel.border = element_rect(color = 'black', size = 1, fill = NA))+
+  scale_y_continuous(
+    limits = c(15.6, 15.9),
+    breaks = seq(15.6, 15.9, by = 0.1),
+    labels = number_format(accuracy = 0.1))
 
 ab1
 
@@ -24,13 +33,14 @@ ab <- ggscatter(micom, x =  'MAG_ab', y = 'MICOM',
                 add.params = list(color = "blue",
                                   fill = "lightgray"))+
   ylim(0,150)+
-  labs(title = 'a.')+
+  labs(title = 'a')+
   font("ylab", size = 15)+
   font("xlab", size = 15)+
   font("title", size = 15, face = 'bold')+
   font("x.text", size = 13)+
   font("y.text", size = 13)+
-  stat_cor(method = "spearman", label.x = 5, label.y = 140, size= 5.5, cor.coef.name = 'rho')+
+  stat_cor(method = "spearman", label.x = 5, label.y = 140, size= 5.5, 
+           cor.coef.name = 'rho', p.label = "italic(P)")+
   theme(panel.border = element_rect(color = 'black', size = 1, fill = NA))
 
 ab
@@ -114,7 +124,7 @@ delta_p <- ggplot(delt, aes(x= fct_inorder(delta), y = cor_value, color = factor
   ylim(0,1)+
   xlab('𝛿: scaling factor')+
   ylab('Spearman correlation coefficient')+
-  labs(title = 'c.')+
+  labs(title = 'c')+
   font("title", size = 15, face = 'bold')+
   font("ylab", size = 15)+ 
   font("xlab", size = 15)+
@@ -159,16 +169,18 @@ gamma_p <- ggplot(gamm, aes(x= fct_inorder(gamma), y = cor_value, color = factor
   geom_boxplot(outlier.shape = NA)+
   geom_point(position=position_jitterdodge(), alpha = 0.5)+
   theme_linedraw()+
-  theme(axis.text.y = element_blank(),
-        legend.title = element_blank(),
+  theme(legend.title = element_blank(),
         legend.position= 'inside')+
   ylim(0,1)+
   xlab('𝛾: regulating factor')+
-  ylab('')+
-  labs(title = 'd.')+
+  ylab('Spearman correlation coefficient')+
+  labs(title = 'd')+
   font("xlab", size = 15)+
   font("title", size = 15, face = 'bold')+
   font("legend.text", size = 12)+
+  font("ylab", size = 15)+ 
+  font("xlab", size = 15)+
+  font("y.text", size = 13)+
   font("x.text", size = 13)
 
 gamma_p
@@ -201,7 +213,7 @@ e <- ggplot(cor_result, aes(x = fct_inorder(Lambda), y = cor_ab))+
   geom_col() +
   labs(x = "Balancing factor (λ)", y = "Spearman correlation coefficient") +
   theme_linedraw()+
-  labs(title = 'e.')+
+  labs(title = 'e')+
   font("title", size = 15, face = 'bold')+
   theme(axis.text.y = element_text(size = 15),
         axis.text.x = element_text(size = 15, angle = 90, hjust = 1),
@@ -224,7 +236,7 @@ f <- ggscatter(data, x =  'MAG_ab', y = 'IMIC',
                conf.int = TRUE,                               
                add.params = list(color = "blue",
                                  fill = "lightgray"))+
-  labs(title = 'f.')+
+  labs(title = 'f')+
   font("title", size = 15, face = 'bold')+
   font("y.text", size = 15)+
   font('ylab', size = 15)+

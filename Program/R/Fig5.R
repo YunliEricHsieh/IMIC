@@ -61,7 +61,7 @@ a <- ggplot(new.data, aes(x = RxnID, y = ab_cor)) +
   scale_color_brewer(palette = "Set1", name = "Time") +  # Ensure 'color' uses time
   theme_linedraw()+
   ylim(0,1)+
-  labs(title = 'a.')+
+  labs(title = 'a')+
   font("title", size = 15, face = 'bold')+
   theme(axis.text.x = element_text(angle = 90, vjust = 1, hjust = 1, size = 13),
         axis.text.y = element_text(size = 15),
@@ -77,7 +77,7 @@ b <- ggplot(new.data, aes(x = RxnID, y = exp_cor)) +
   scale_color_brewer(palette = "Set1", name = "Time") +  # Ensure 'color' uses time
   theme_linedraw()+
   ylim(0,1)+
-  labs(title = 'b.')+
+  labs(title = 'b')+
   font("title", size = 15, face = 'bold')+
   font("legend.text", size = 13)+
   theme(axis.text.x = element_text(angle = 90, vjust = 1, hjust = 1, size = 13),

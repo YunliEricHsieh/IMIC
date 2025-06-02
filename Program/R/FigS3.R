@@ -16,7 +16,7 @@ consensus <- ggplot(cons, aes(x= ModelID, y = ratio))+
   geom_boxplot(outlier.shape = NA)+
   geom_point(position='jitter', alpha = 1)+
   #  ylim(0,1)+
-  labs(title = 'a. consensus')+
+  labs(title = 'a consensus')+
   xlab('')+
   theme(axis.text = element_blank())+
   ylab('Relative variability\nof growth rate')+
@@ -43,7 +43,7 @@ carveme <- ggplot(carv, aes(x= ModelID, y = ratio))+
   geom_boxplot(outlier.shape = NA)+
   geom_point(position='jitter', alpha = 1)+
   #  ylim(0,1)+
-  labs(title = 'b. CarveMe')+
+  labs(title = 'b CarveMe')+
   xlab('')+
   ylab('')+
   theme(axis.text = element_blank())+
@@ -67,7 +67,7 @@ gapseq <- ggplot(gaps, aes(x= ModelID, y = ratio))+
   geom_boxplot(outlier.shape = NA)+
   geom_point(position='jitter', alpha = 1)+
   #  ylim(0,1)+
-  labs(title = 'c. gapseq')+
+  labs(title = 'c gapseq')+
   xlab('MAG ID')+
   ylab('Relative variability\nof growth rate')+
   font("xlab", size = 14)+
@@ -95,7 +95,7 @@ kbase <- ggplot(kbas, aes(x= ModelID, y = ratio))+
   geom_boxplot(outlier.shape = NA)+
   geom_point(position='jitter', alpha = 1)+
   #  ylim(0,1)+
-  labs(title = 'd. KBase')+
+  labs(title = 'd KBase')+
   xlab('MAG ID')+
   ylab('')+
   theme(axis.text = element_blank())+

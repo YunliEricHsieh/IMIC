@@ -166,8 +166,8 @@ for (i in 1:nrow(top_mets)){
 top_mets_flux$ID <- as.factor(rep(top_mets$Name,12))
 colnames(top_mets_flux) <- c('Flux_sum','ID')
 top_mets_flux$Ratio <- rep(c(rep('1:1',nrow(top_mets)),rep('1:1000',nrow(top_mets)),rep('1000:1',nrow(top_mets))),4)
-top_mets_flux$Time <- as.factor(c(rep(rep('0h',nrow(top_mets)),3), rep(rep('4h',nrow(top_mets)),3), rep(rep('8h',nrow(top_mets)),3),
-                                  rep(rep('24h',nrow(top_mets)),3)))
+top_mets_flux$Time <- as.factor(c(rep(rep('0 h',nrow(top_mets)),3), rep(rep('4 h',nrow(top_mets)),3), rep(rep('8 h',nrow(top_mets)),3),
+                                  rep(rep('24 h',nrow(top_mets)),3)))
 
 top_mets_flux$Flux_sum <- log10(top_mets_flux$Flux_sum)
 

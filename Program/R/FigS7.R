@@ -87,7 +87,7 @@ a <- ggplot(IMIC_sugar, aes(x = Time, y = Flux, color = `Sugars and organic acid
   geom_point(size = 3) +
   scale_color_manual(values = c(
     "#A65628", "#FF7F00", "yellow2")) +
-  labs(title = 'a. IMIC', y = 'Flux-sum (mmol/g-DCW-hr)') +
+  labs(title = 'a IMIC', y = 'Flux-sum (mmol/g-DCW-hr)') +
   theme_minimal() +
   theme(axis.title.x = element_blank(),
         panel.border = element_rect(color = 'black', linewidth = 1, fill = NA),
@@ -103,7 +103,7 @@ b <- ggplot(micom_ab1_sugar, aes(x = Time, y = Flux, color = `Sugars and organic
   geom_point(size = 3) +
   scale_color_manual(values = c(
     "#A65628", "#FF7F00", "yellow2")) +
-  labs(title = 'b. MICOM', y = '') +
+  labs(title = 'b MICOM', y = '') +
   theme_minimal() +
   theme(axis.title.x = element_blank(),
         panel.border = element_rect(color = 'black', linewidth = 1, fill = NA),
@@ -120,7 +120,7 @@ c <- ggplot(coco_ab1_sugar, aes(x = Time, y = Flux, color = `Sugars and organic 
   geom_point(size = 3) +
   scale_color_manual(values = c(
     "#A65628", "#FF7F00", "yellow2")) +
-  labs(title = 'c. CoCo-GEM', y = '') +
+  labs(title = 'c CoCo-GEM', y = '') +
   theme_minimal() +
   theme(axis.title.x = element_blank(),
         panel.border = element_rect(color = 'black', linewidth = 1, fill = NA),
@@ -137,7 +137,7 @@ d <- ggplot(micom_sugar, aes(x = Time, y = Flux, color = `Sugars and organic aci
   geom_point(size = 3) +
   scale_color_manual(values = c(
     "#A65628", "#FF7F00", "yellow2")) +
-  labs(title = 'd. MICOM', y = '') +
+  labs(title = 'd MICOM', y = '') +
   theme_minimal() +
   theme(axis.title.x = element_blank(),
         panel.border = element_rect(color = 'black', linewidth = 1, fill = NA),
@@ -154,7 +154,7 @@ e <- ggplot(coco_sugar, aes(x = Time, y = Flux, color = `Sugars and organic acid
   geom_point(size = 3) +
   scale_color_manual(values = c(
     "#A65628", "#FF7F00", "yellow2")) +
-  labs(title = 'e. CoCo-GEM', y = '') +
+  labs(title = 'e CoCo-GEM', y = '') +
   theme_minimal() +
   theme(axis.title.x = element_blank(),
         panel.border = element_rect(color = 'black', linewidth = 1, fill = NA),
@@ -173,7 +173,7 @@ f <- ggplot(IMIC_amino, aes(x = Time, y = Flux, color = `Amino acids`, group = `
     "#E41A1C", "#377EB8", "#4DAF4A", "#984EA3", "orange4", 
     "yellow4", "tan", "#F781BF", "#999999", "#66C2A5", 
     "orange1")) +
-  labs(title = 'f. IMIC', y = 'Flux-sum (mmol/g-DCW-hr)') +
+  labs(title = 'f IMIC', y = 'Flux-sum (mmol/g-DCW-hr)') +
   theme_minimal() +
   theme(axis.title.x = element_blank(),
         panel.border = element_rect(color = 'black', linewidth = 1, fill = NA),
@@ -192,7 +192,7 @@ g <- ggplot(micom_ab1_amino, aes(x = Time, y = Flux, color = `Amino acids`, grou
     "#E41A1C", "#377EB8", "#4DAF4A", "#984EA3", "orange4", 
     "yellow4", "tan", "#F781BF", "#999999", "#66C2A5", 
     "orange1")) +
-  labs(title = 'g. MICOM', y = '') +
+  labs(title = 'g MICOM', y = '') +
   theme_minimal() +
   theme(axis.title.x = element_blank(),
         panel.border = element_rect(color = 'black', linewidth = 1, fill = NA),
@@ -211,7 +211,7 @@ h <- ggplot(coco_ab1_amino, aes(x = Time, y = Flux, color = `Amino acids`, group
     "#E41A1C", "#377EB8", "#4DAF4A", "#984EA3", "orange4", 
     "yellow4", "tan", "#F781BF", "#999999", "#66C2A5", 
     "orange1")) +
-  labs(title = 'h. CoCo-GEM', y = '') +
+  labs(title = 'h CoCo-GEM', y = '') +
   theme_minimal() +
   theme(axis.title.x = element_blank(),
         panel.border = element_rect(color = 'black', linewidth = 1, fill = NA),
@@ -230,7 +230,7 @@ i <- ggplot(micom_amino, aes(x = Time, y = Flux, color = `Amino acids`, group = 
     "#E41A1C", "#377EB8", "#4DAF4A", "#984EA3", "orange4", 
     "yellow4", "tan", "#F781BF", "#999999", "#66C2A5", 
     "orange1")) +
-  labs(title = 'i. MICOM', y = '') +
+  labs(title = 'i MICOM', y = '') +
   theme_minimal() +
   theme(axis.title.x = element_blank(),
         panel.border = element_rect(color = 'black', linewidth = 1, fill = NA),
@@ -249,7 +249,7 @@ j <- ggplot(coco_amino, aes(x = Time, y = Flux, color = `Amino acids`, group = `
     "#E41A1C", "#377EB8", "#4DAF4A", "#984EA3", "orange4", 
     "yellow4", "tan", "#F781BF", "#999999", "#66C2A5", 
     "orange1")) +
-  labs(title = 'j. CoCo-GEM', y = '') +
+  labs(title = 'j CoCo-GEM', y = '') +
   theme_minimal() +
   theme(axis.title.x = element_blank(),
         panel.border = element_rect(color = 'black', linewidth = 1, fill = NA),
@@ -307,17 +307,24 @@ corr_analysis <- function(aa_data) {
   aa_data %>%
     group_by(`Amino acids`) %>%
     summarise(
-      rho = cor(round(Flux, 5), round(Concentration, 5), method = "pearson"),
-      p_value = round(cor.test(round(Flux, 5), round(Concentration, 5), method = "pearson", exact = FALSE)$p.value, 4)
+      rho = cor.test(Flux, Concentration, method = "spearman")$estimate,
+      p_value = cor.test(Flux, Concentration, method = "spearman")$p.value
     ) %>%
-    ungroup()
+    ungroup() %>%
+    mutate(
+      p_adj = p.adjust(p_value, method = "BH"),
+      # now round for presentation
+      rho     = round(rho,     5),
+      p_value = round(p_value, 5),
+      p_adj   = round(p_adj,   4)
+    )
 }
 
 # Apply correlation analysis to each merged dataset
 cor_results_list <- lapply(merged_amino, corr_analysis)
 
 # Combine all results into a single data frame
-cor_results <- do.call(cbind, lapply(cor_results_list, function(df) select(df, rho, p_value)))
+cor_results <- do.call(cbind, lapply(cor_results_list, function(df) select(df, rho, p_adj)))
 colnames(cor_results) <- paste0(rep(amino_names, each = 2), c("_r", "_p"))
 
 # Set row names

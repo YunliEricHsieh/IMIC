@@ -47,7 +47,7 @@ a <- ggscatter(consensus, x =  'Replication_rate', y = 'IMIC',
                 conf.int = TRUE,                                  # Add confidence interval
                 add.params = list(color = "blue",
                                   fill = "lightgray"))+
-  labs(title = 'a.')+
+  labs(title = 'a')+
   font("title", size = 18, face = 'bold')+
   font("ylab", size = 18)+
   font("y.text", size = 16)+
@@ -61,12 +61,16 @@ micom.consensus <- micom.consensus %>% mutate_if(is.numeric, ~round(., 6))
 b <- ggscatter(micom.consensus, x =  'Replication_rate', y = 'MICOM_ab1',
                xlab = '',
                ylab = '')+
-  labs(title = 'b.')+
+  labs(title = 'b')+
   font("title", size = 18, face = 'bold')+
   font("ylab", size = 18)+
   font("y.text", size = 16)+
   theme(panel.border = element_rect(color = 'black', size = 1, fill = NA),
-        axis.text.x = element_blank())
+        axis.text.x = element_blank())+
+  scale_y_continuous(
+    limits = c(15.6, 15.9),
+    breaks = seq(15.6, 15.9, by = 0.1),
+    labels = number_format(accuracy = 0.1))
 
 b
 # consensus - coco-ab1
@@ -100,13 +104,17 @@ c <- ggscatter(coco.consensus.ab1, x =  'Replication_rate', y = na,
          conf.int = TRUE,                                  # Add confidence interval
          add.params = list(color = "blue",
                  fill = "lightgray"))+
-  labs(title = 'c.')+
+  labs(title = 'c')+
   font("title", size = 18, face = 'bold')+
   font("ylab", size = 18)+
   font("y.text", size = 16)+
   stat_cor(method = "spearman", label.x = 0.8, label.y = 15.93, size= 7, cor.coef.name = 'rho')+
   theme(panel.border = element_rect(color = 'black', size = 1, fill = NA),
-    axis.text.x = element_blank())
+    axis.text.x = element_blank())+
+  scale_y_continuous(
+    limits = c(15.7, 16.0),
+    breaks = seq(15.7, 16.0, by = 0.1),
+    labels = number_format(accuracy = 0.1))
 
 c
 
@@ -121,7 +129,7 @@ di <- ggplot(cor_result, aes(x = cor)) +
     panel.grid = element_blank())
 
 # Combine the plots
-c1 <- c + annotation_custom(ggplotGrob(di), xmin = 0.1, xmax = 0.8, ymin = 15.88, ymax = 15.95)
+c1 <- c + annotation_custom(ggplotGrob(di), xmin = 0.1, xmax = 0.8, ymin = 15.85, ymax = 16.0)
 
 c1
 
@@ -134,7 +142,7 @@ d <- ggscatter(micom.consensus, x =  'Replication_rate', y = 'MICOM',
                conf.int = TRUE,                                  # Add confidence interval
                add.params = list(color = "blue",
                                  fill = "lightgray"))+
-  labs(title = 'd.')+
+  labs(title = 'd')+
   font("title", size = 18, face = 'bold')+
   font("ylab", size = 18)+
   font("y.text", size = 16)+
@@ -172,7 +180,7 @@ e <- ggscatter(coco.consensus, x =  'Replication_rate', y = na,
                conf.int = TRUE,                                  # Add confidence interval
                add.params = list(color = "blue",
                                  fill = "lightgray"))+
-  labs(title = 'e.')+
+  labs(title = 'e')+
   font("title", size = 18, face = 'bold')+
   font("ylab", size = 18)+
   font("y.text", size = 16)+
@@ -193,7 +201,7 @@ di_e <- ggplot(cor_result, aes(x = cor)) +
         panel.grid = element_blank())
 
 # Combine the plots
-e1 <- e + annotation_custom(ggplotGrob(di_e), xmin = 0.1, xmax = 0.8, ymin = 45, ymax = 80)
+e1 <- e + annotation_custom(ggplotGrob(di_e), xmin = 0.1, xmax = 0.8, ymin = 36, ymax = 80)
 
 e1
 
@@ -206,7 +214,7 @@ f <- ggscatter(carveme, x =  'Replication_rate', y = 'IMIC',
                conf.int = TRUE,                                  # Add confidence interval
                add.params = list(color = "blue",
                                  fill = "lightgray"))+
-  labs(title = 'f.')+
+  labs(title = 'f')+
   font("title", size = 18, face = 'bold')+
   font("ylab", size = 18)+
   font("y.text", size = 16)+
@@ -220,12 +228,16 @@ micom.carveme <- micom.carveme %>% mutate_if(is.numeric, ~round(., 6))
 g <- ggscatter(micom.carveme, x =  'Replication_rate', y = 'MICOM_ab1',
                xlab = '',
                ylab = '')+
-  labs(title = 'g.')+
+  labs(title = 'g')+
   font("title", size = 18, face = 'bold')+
   font("ylab", size = 18)+
   font("y.text", size = 16)+
   theme(panel.border = element_rect(color = 'black', size = 1, fill = NA),
-        axis.text.x = element_blank())
+        axis.text.x = element_blank())+
+  scale_y_continuous(
+    limits = c(36.9, 37.2),
+    breaks = seq(36.9, 37.2, by = 0.1),
+    labels = number_format(accuracy = 0.1))
 
 g
 
@@ -257,7 +269,7 @@ h <- ggscatter(coco.carveme.ab1, x =  'Replication_rate', y = na,
                conf.int = TRUE,                                  # Add confidence interval
                add.params = list(color = "blue",
                                  fill = "lightgray"))+
-  labs(title = 'h.')+
+  labs(title = 'h')+
   font("title", size = 18, face = 'bold')+
   font("ylab", size = 18)+
   font("y.text", size = 16)+
@@ -278,7 +290,7 @@ di_h <- ggplot(cor_result, aes(x = cor)) +
         panel.grid = element_blank())
 
 # Combine the plots
-h1 <- h + annotation_custom(ggplotGrob(di_h), xmin = 0.1, xmax = 0.8, ymin = 10, ymax = 27)
+h1 <- h + annotation_custom(ggplotGrob(di_h), xmin = 0.1, xmax = 0.8, ymin = 5, ymax = 25)
 
 h1
 
@@ -291,7 +303,7 @@ u <- ggscatter(micom.carveme, x =  'Replication_rate', y = 'MICOM',
                conf.int = TRUE,                                  # Add confidence interval
                add.params = list(color = "blue",
                                  fill = "lightgray"))+
-  labs(title = 'i.')+
+  labs(title = 'i')+
   font("title", size = 18, face = 'bold')+
   font("ylab", size = 18)+
   font("y.text", size = 16)+
@@ -329,7 +341,7 @@ j <- ggscatter(coco.carveme, x =  'Replication_rate', y = na,
                conf.int = TRUE,                                  # Add confidence interval
                add.params = list(color = "blue",
                                  fill = "lightgray"))+
-  labs(title = 'j.')+
+  labs(title = 'j')+
   font("title", size = 18, face = 'bold')+
   font("ylab", size = 18)+
   font("y.text", size = 16)+
@@ -350,7 +362,7 @@ di_j <- ggplot(cor_result, aes(x = cor)) +
         panel.grid = element_blank())
 
 # Combine the plots
-j1 <- j + annotation_custom(ggplotGrob(di_j), xmin = 0.1, xmax = 0.8, ymin = 70, ymax = 120)
+j1 <- j + annotation_custom(ggplotGrob(di_j), xmin = 0.1, xmax = 0.8, ymin = 55, ymax = 120)
 
 j1
 
@@ -363,7 +375,7 @@ k <- ggscatter(gapseq, x =  'Replication_rate', y = 'IMIC',
                conf.int = TRUE,                                  # Add confidence interval
                add.params = list(color = "blue",
                                  fill = "lightgray"))+
-  labs(title = 'k.')+
+  labs(title = 'k')+
   font("title", size = 18, face = 'bold')+
   font("ylab", size = 18)+
   font("y.text", size = 16)+
@@ -377,12 +389,16 @@ micom.gapseq <- micom.gapseq %>% mutate_if(is.numeric, ~round(., 6))
 l <- ggscatter(micom.gapseq, x =  'Replication_rate', y = 'MICOM_ab1',
                xlab = '',
                ylab = '')+
-  labs(title = 'l.')+
+  labs(title = 'l')+
   font("title", size = 18, face = 'bold')+
   font("ylab", size = 18)+
   font("y.text", size = 16)+
   theme(panel.border = element_rect(color = 'black', size = 1, fill = NA),
-        axis.text.x = element_blank())
+        axis.text.x = element_blank())+
+  scale_y_continuous(
+    limits = c(31.9, 32.2),
+    breaks = seq(31.9, 32.2, by = 0.1),
+    labels = number_format(accuracy = 0.1))
 
 l
 # gapseq - coco-ab1
@@ -413,7 +429,7 @@ m <- ggscatter(coco.gapseq.ab1, x =  'Replication_rate', y = na,
                conf.int = TRUE,                                  # Add confidence interval
                add.params = list(color = "blue",
                                  fill = "lightgray"))+
-  labs(title = 'm.')+
+  labs(title = 'm')+
   font("title", size = 18, face = 'bold')+
   font("ylab", size = 18)+
   font("y.text", size = 16)+
@@ -434,7 +450,7 @@ di_m <- ggplot(cor_result, aes(x = cor)) +
         panel.grid = element_blank())
 
 # Combine the plots
-m1 <- m + annotation_custom(ggplotGrob(di_m), xmin = 0.1, xmax = 0.8, ymin = 10, ymax = 25)
+m1 <- m + annotation_custom(ggplotGrob(di_m), xmin = 0.1, xmax = 0.8, ymin = 5, ymax = 25)
 
 m1
 
@@ -447,7 +463,7 @@ n <- ggscatter(micom.gapseq, x =  'Replication_rate', y = 'MICOM',
                conf.int = TRUE,                                  # Add confidence interval
                add.params = list(color = "blue",
                                  fill = "lightgray"))+
-  labs(title = 'n.')+
+  labs(title = 'n')+
   font("title", size = 18, face = 'bold')+
   font("ylab", size = 18)+
   font("y.text", size = 16)+
@@ -485,7 +501,7 @@ o <- ggscatter(coco.gapseq, x =  'Replication_rate', y = na[1],
                conf.int = TRUE,                                  # Add confidence interval
                add.params = list(color = "blue",
                                  fill = "lightgray"))+
-  labs(title = 'o.')+
+  labs(title = 'o')+
   font("title", size = 18, face = 'bold')+
   font("ylab", size = 18)+
   font("y.text", size = 16)+
@@ -505,7 +521,7 @@ di_o <- ggplot(cor_result, aes(x = cor)) +
         panel.grid = element_blank())
 
 # Combine the plots
-o1 <- o + annotation_custom(ggplotGrob(di_o), xmin = 0.1, xmax = 0.8, ymin = 90, ymax = 150)
+o1 <- o + annotation_custom(ggplotGrob(di_o), xmin = 0.1, xmax = 0.8, ymin = 70, ymax = 150)
 
 o1
 
@@ -518,7 +534,7 @@ p <- ggscatter(kbase, x =  'Replication_rate', y = 'IMIC',
                conf.int = TRUE,                                  # Add confidence interval
                add.params = list(color = "blue",
                                  fill = "lightgray"))+
-  labs(title = 'p.')+
+  labs(title = 'p')+
   font("title", size = 18, face = 'bold')+
   font("ylab", size = 18)+
   font("y.text", size = 16)+
@@ -538,7 +554,7 @@ q <- ggscatter(micom.kbase, x =  'Replication_rate', y = 'MICOM_ab1',
                conf.int = TRUE,                                  # Add confidence interval
                add.params = list(color = "blue",
                                  fill = "lightgray"))+
-  labs(title = 'q.')+
+  labs(title = 'q')+
   font("title", size = 18, face = 'bold')+
   font("y.text", size = 16)+
   font("xlab", size = 18)+
@@ -576,7 +592,7 @@ r <- ggscatter(coco.kbase.ab1, x =  'Replication_rate', y = na,
                conf.int = TRUE,                                  # Add confidence interval
                add.params = list(color = "blue",
                                  fill = "lightgray"))+
-  labs(title = 'r.')+
+  labs(title = 'r')+
   font("title", size = 18, face = 'bold')+
   font("y.text", size = 16)+
   font("xlab", size = 18)+
@@ -596,7 +612,7 @@ di_r <- ggplot(cor_result, aes(x = cor)) +
         panel.grid = element_blank())
 
 # Combine the plots
-r1 <- r + annotation_custom(ggplotGrob(di_r), xmin = 0.1, xmax = 0.8, ymin = 10, ymax = 27)
+r1 <- r + annotation_custom(ggplotGrob(di_r), xmin = 0.1, xmax = 0.8, ymin = 10, ymax = 30)
 
 r1
 
@@ -609,7 +625,7 @@ s <- ggscatter(micom.kbase, x =  'Replication_rate', y = 'MICOM',
                conf.int = TRUE,                                  # Add confidence interval
                add.params = list(color = "blue",
                                  fill = "lightgray"))+
-  labs(title = 's.')+
+  labs(title = 's')+
   font("title", size = 18, face = 'bold')+
   font("y.text", size = 16)+
   font("xlab", size = 18)+
@@ -647,7 +663,7 @@ t <- ggscatter(coco.kbase, x =  'Replication_rate', y = na[1],
                conf.int = TRUE,                                  # Add confidence interval
                add.params = list(color = "blue",
                                  fill = "lightgray"))+
-  labs(title = 't.')+
+  labs(title = 't')+
   font("title", size = 18, face = 'bold')+
   font("y.text", size = 16)+
   font("xlab", size = 18)+
@@ -667,7 +683,7 @@ di_t <- ggplot(cor_result, aes(x = cor)) +
         panel.grid = element_blank())
 
 # Combine the plots
-t1 <- t + annotation_custom(ggplotGrob(di_t), xmin = 0.1, xmax = 0.8, ymin = 100, ymax = 190)
+t1 <- t + annotation_custom(ggplotGrob(di_t), xmin = 0.1, xmax = 0.8, ymin = 70, ymax = 180)
 
 t1
 

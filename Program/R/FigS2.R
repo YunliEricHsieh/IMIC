@@ -14,7 +14,7 @@ a <- ggscatter(data, x =  'MAG_ab', y = 'IMIC',
                conf.int = TRUE,                               
                add.params = list(color = "blue",
                                  fill = "lightgray"))+
-  labs(title = 'a. consensus')+
+  labs(title = 'a consensus')+
   font("title", size = 15, face = 'bold')+
   font("y.text", size = 15)+
   font('ylab', size = 15)+
@@ -35,11 +35,12 @@ b <- ggscatter(data, x =  'MAG_ab', y = 'IMIC',
                conf.int = TRUE,                                  # Add confidence interval
                add.params = list(color = "blue",
                                  fill = "lightgray"))+
-  labs(title = 'b. CarveMe')+
+  labs(title = 'b CarveMe')+
   font("title", size = 15, face = 'bold')+
   font("y.text", size = 15)+
   stat_cor(method = "spearman", label.x = 40, label.y = 35, size= 5.5, cor.coef.name = 'rho')+
   theme(axis.text.x = element_blank())
+
 
 b
 
@@ -54,7 +55,7 @@ c <- ggscatter(data, x =  'MAG_ab', y = 'IMIC',
                conf.int = TRUE,                                  # Add confidence interval
                add.params = list(color = "blue",
                                  fill = "lightgray"))+
-  labs(title = 'c. gapseq')+
+  labs(title = 'c gapseq')+
   font("title", size = 15, face = 'bold')+
   font("y.text", size = 15)+
   font("x.text", size = 15)+
@@ -75,7 +76,7 @@ d <- ggscatter(data, x =  'MAG_ab', y = 'IMIC',
                conf.int = TRUE,                                  # Add confidence interval
                add.params = list(color = "blue",
                                  fill = "lightgray"))+
-  labs(title = 'd. KBase')+
+  labs(title = 'd KBase')+
   font("xlab", size = 15)+
   font("title", size = 15, face = 'bold')+
   font("x.text", size = 15)+
@@ -87,5 +88,5 @@ d
 library(patchwork)
 a+b+c+d+plot_layout(nrow = 2)
 
-ggsave(filename = "~/IMIC/Figure/Fig S1.svg",
+ggsave(filename = "~/IMIC/Figure/Fig S2.svg",
        width = 25,height = 20,units = "cm")

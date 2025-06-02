@@ -108,7 +108,7 @@ a<- ggplot()+
   ) +
   # Adding a vertical line at x = 12
   geom_vline(xintercept = 12, color = "darkred", size = 1, linetype = "solid") +
-  labs(title = 'a.')+
+  labs(title = 'a')+
   font("ylab", size = 16)+
   font("title", size = 16, face = 'bold')+
   font("y.text", size = 15)+
@@ -119,6 +119,8 @@ a<- ggplot()+
         legend.title = element_blank(),
         axis.text.x = element_blank(),
         panel.background = element_blank(),
+        axis.text = element_text(color = "black"),
+        axis.ticks = element_line(color = "black"),  
         panel.border = element_rect(color = 'black', size = 1, fill = NA))
 
 a
@@ -308,7 +310,7 @@ b <- ggplot()+
   ) +
   # Adding a vertical line at x = 9
   geom_vline(xintercept = 9, color = "darkred", size = 1, linetype = "solid") +
-  labs(title = 'b.')+
+  labs(title = 'b')+
   font("ylab", size = 16)+
   font("xlab", size = 16)+
   font("title", size = 16, face = 'bold')+
@@ -320,6 +322,8 @@ b <- ggplot()+
         panel.grid.minor = element_blank(),
         legend.title = element_blank(),
         panel.background = element_blank(),
+        axis.text = element_text(color = "black"),
+        axis.ticks = element_line(color = "black"),  
         panel.border = element_rect(color = 'black', size = 1, fill = NA))+
   scale_color_manual(values = c("#999999", "#E69F00", "lightblue2"))
 
