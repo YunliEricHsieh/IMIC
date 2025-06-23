@@ -2,7 +2,7 @@
 
 ## Description
 
-This repository contains code to produce the results presented in the manuscript: [Integration of metatranscriptomics data improves the predictive capacity of microbial community metabolic models](https://doi.org/10.1093/ismejo/wraf109).
+This repository contains code to produce the results presented in the publication of [Integration of metatranscriptomics data improves the predictive capacity of microbial community metabolic models](https://doi.org/10.1093/ismejo/wraf109).
 
 
 ## Dependencies
