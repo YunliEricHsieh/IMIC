@@ -13,5 +13,5 @@ This repository contains code to produce the results presented in the manuscript
 - [Gurobi solver](https://support.gurobi.com/hc/en-us/articles/4534161999889-How-do-I-install-Gurobi-Optimizer) (tested on version 11.0.0)
 
 ## Workflow for the publication results
-- The script ['IMIC/Program/matlab/model_generation/build_community_model.m'](https://github.com/YunliEricHsieh/IMIC/blob/main/Program/matlab/model_generation/build_community_model.m) contains the workflow for building the model
-- The script ['Program/matlab/calculate_community_growth.m'](https://github.com/YunliEricHsieh/IMIC/blob/main/Program/matlab/calculate_community_growth.m) performs the prediction of community growth rates for the IMIC and CoCo-GEM approaches
+- The script ['IMIC/Program/matlab/model_generation/build_community_model.m'] contains the workflow for building the model
+- The script ['Program/matlab/calculate_community_growth.m'] performs the prediction of community growth rates for the IMIC and CoCo-GEM approaches
