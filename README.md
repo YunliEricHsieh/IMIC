@@ -15,3 +15,4 @@ This repository contains code to produce the results presented in the manuscript
 ## Workflow for the publication results
 - The script `IMIC/Program/matlab/model_generation/build_community_model.m` contains the workflow for building the model
 - The script `IMIC/Program/matlab/calculate_community_growth.m` performs the prediction of community growth rates for the IMIC and CoCo-GEM approaches
+- The script `IMIC/Program/matlab/sensitivity_analysis` performs a sensitivity analysis for IMIC
