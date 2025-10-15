@@ -535,6 +535,16 @@ if ~isempty(reaction_sets)
                 consistModel.rules = vertcat(consistModel.rules, {''});
             end
         end
+    else
+        % include the rules from original model
+        for i = 1:numel(consistModel.rxns)
+            rxnIndex = find(ismember(model_irr.rxns ,consistModel.rxns{i}));
+            if ~isempty(rxnIndex)
+                consistModel.rules{i} = model_irr.rules{rxnIndex};
+            else
+                consistModel.rules{i} = '';
+            end
+        end
     end
     
     % get the metabolites associated with these reactions
