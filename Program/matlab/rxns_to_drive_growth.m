@@ -55,7 +55,7 @@ for i = 1:numel(timepoint)
             gpr_split = strsplit(com_model.rules{j},'|');
             gpr_split_TPM = [];
 
-            for k = numel(gpr_split)
+            for k = 1:numel(gpr_split)
                 list = extractBetween(gpr_split{k},'x(',')');
                 list_TPM = [];
 
