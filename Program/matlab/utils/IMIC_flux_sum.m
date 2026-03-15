@@ -20,7 +20,7 @@ for i = 1:numel(model.rxns)
         gpr_split = strsplit(model.rules{i},'|');
         gpr_split_TPM = [];
 
-        for j = numel(gpr_split)
+        for j = 1:numel(gpr_split)
             list = extractBetween(gpr_split{j},'x(',')');
             list_TPM = [];
 
